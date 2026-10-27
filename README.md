@@ -1,61 +1,37 @@
-# Velo for Claude
+# Velo MCP
 
-[Velo](https://usevelo.ai) makes finished, narrated videos: explainers, product demos, pitch and launch videos, motion graphics and social clips. It works from a short brief, a document or deck, a screen recording, a public website, or an AI presenter. This plugin connects Claude to your Velo workspace so you can start, guide, edit and export Velo videos without leaving the conversation.
+Velo's MCP server (`https://api.usevelo.ai/mcp`) packaged for AI clients. The server itself lives in `velo-web-backend` (`app/velo_mcp`). This repo holds only what each client installs: its manifest, the connector URL, and the skill that teaches the agent Velo's workflow.
 
-## What's included
+## Layout
 
-- **Velo connector:** a remote MCP server at `https://api.usevelo.ai/mcp`. You sign in with your Velo account over OAuth; the plugin stores no keys.
-- **`velo-video` skill:** teaches Claude Velo's workflow end to end. Claude writes Velo a short brief, follows the video's progress, shows you every question and the full script, sends back your answers, and hands you the links. Claude never approves a script for you.
+| Folder | Client | Ships through |
+| --- | --- | --- |
+| `plugins/claude/` | Claude: claude.ai, Desktop, Cowork, Claude Code | Anthropic's plugin directory (plugin path `plugins/claude`), and the Claude Code marketplace in `.claude-plugin/marketplace.json` |
 
-## Requirements
+Each new client gets its own folder under `plugins/`:
 
-- A Velo account and workspace. Sign up at [usevelo.ai](https://usevelo.ai).
-- Credits in that workspace for making and changing videos.
+| Client | Folder | Notes |
+| --- | --- | --- |
+| ChatGPT and Codex | `plugins/openai/` | One plugin format for both. Uploaded as an archive at platform.openai.com, not read from this repo. See [Submit your Claude Code plugin to OpenAI](https://developers.openai.com/plugins/guides/submit-claude-plugin). |
+| Cursor | `plugins/cursor/` | Plus a root `.cursor-plugin/marketplace.json` that points at it. See [Cursor plugins](https://cursor.com/docs/reference/plugins). |
+| Gemini CLI | repo root | `gemini-extension.json` has to sit at the repo root. See [Gemini CLI extensions](https://geminicli.com/docs/extensions/reference/). |
 
-## Install and connect
+## Rules for a plugin folder
 
-**claude.ai, Claude Desktop and Cowork:** install the Velo plugin from the directory, open the plugin's **Connectors** tab, choose **Connect** for Velo, and sign in. Velo asks you to approve access for your workspace.
+- **Self-contained.** A client installs only its folder, so every file it uses lives inside it. No symlinks, no `../` paths, no files shared across folders.
+- **The path is permanent.** Anthropic's directory can't move a submission to another folder, so `plugins/claude` stays where it is.
+- **Skill text is per client.** OpenAI requires provider-neutral wording ("the model", not "Claude"), and each client uploads files differently. Copy the skill into each folder and adapt it.
+- **Raise `version`** in the folder's manifest with every release.
 
-**Claude Code:** install the plugin, run `/mcp`, select `velo`, and choose **Authenticate**. Your browser opens Velo's sign-in and consent page. The skill is available as `/velo:velo-video`.
+## Work on the Claude plugin
 
-To disconnect, remove the connection in Claude, or disconnect it in Velo under **Connectors → Velo MCP → Your connections**.
+```sh
+claude plugin validate plugins/claude   # the plugin
+claude plugin validate .                # the marketplace
+claude --plugin-dir plugins/claude      # try it in Claude Code
+```
 
-## Try it
-
-- "Make a 60-second explainer about our new onboarding flow with Velo."
-- "Turn the attached pitch deck into a video."
-- "Make a product demo video of https://example.com."
-- "Make a short video presented by an avatar announcing our Q4 launch."
-- "What's the status of my Velo video?"
-- "Which voices can I use? Switch the narration to a warmer one."
-- "Export the final video."
-
-## Tools
-
-| Tool | What it does |
-| --- | --- |
-| `create_video` | Starts a new video with Velo's agent from a brief, a document, a recording, a website or an avatar. Spends credits. |
-| `edit_video` | Sends your reply, an answer to Velo's question, script approval or a change request to a video. Spends credits. |
-| `get_video_status` | Gets a video's status, Velo's latest message and any question waiting for you. |
-| `list_videos` | Lists your videos in the workspace, most recent first. |
-| `upload_file` | Adds files (a document, a recording, images, a logo) to a video through an upload link. |
-| `list_files` | Confirms which uploaded files are waiting to go to Velo. |
-| `list_voices` | Lists the narration voices you can use. |
-| `list_avatars` | Lists the AI presenters you can use. |
-| `get_credit_balance` | Shows your workspace's remaining credits and plan. |
-| `export_video` | Renders the current draft into the finished video. Free. |
-
-## Credits
-
-Making and changing videos (`create_video`, `edit_video`) spends credits from your Velo workspace. Exporting is free, though automatic repairs after a render error may use credits. Workspace owners add credits in Velo's billing settings.
-
-## Data handling
-
-When you use the plugin, Claude sends Velo the brief it writes, your replies, and any files you add. Velo uses them to make your video in your workspace. Velo's handling of that data is covered by its [Privacy Policy](https://www.usevelo.ai/privacy) and [Terms of Service](https://www.usevelo.ai/terms).
-
-## Support
-
-Email [support@usevelo.ai](mailto:support@usevelo.ai).
+To install from GitHub instead: `/plugin marketplace add lookup-engg/velo-mcp`, then `/plugin install velo@velo`. While the repo is private, Claude Code needs a stored git credential (`gh auth setup-git`).
 
 ## License
 

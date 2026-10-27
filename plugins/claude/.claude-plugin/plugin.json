@@ -9,7 +9,7 @@
     "url": "https://usevelo.ai"
   },
   "homepage": "https://usevelo.ai",
-  "repository": "https://github.com/lookup-engg/velo-claude-plugin",
+  "repository": "https://github.com/lookup-engg/velo-mcp",
   "license": "LicenseRef-Proprietary",
   "keywords": ["video", "video-generation", "explainer", "product-demo", "presentation"],
   "icon": "./assets/velo-icon.svg",
