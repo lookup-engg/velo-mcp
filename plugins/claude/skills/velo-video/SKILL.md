@@ -19,16 +19,17 @@ The role here: write Velo a short brief, show the user everything Velo says and 
 ## How results read in chat
 
 - Show every link Velo returns as a short markdown link with words, such as [Open your video](url) or [Add your files](url). Never paste the raw URL, and never build or guess one.
-- Keep IDs (`chat_id`, voice, avatar, option and scene IDs) and any curl command out of chat. Use them only in tool calls.
+- Keep IDs (`chat_id`, voice, avatar, option and scene IDs) out of chat. Use them only in tool calls.
 - Use names and labels in every reply, confirmations included. Map the user's chosen name back to its ID when calling a tool.
 - Say times and durations in plain words: "about 2 minutes", "an hour ago".
 - Describe choices and next steps in everyday language. Explain API fields only when the user asks for technical debugging.
 
 ## Start a video
 
-1. **Add files first, if there are any.** A document, a recording, audio, images or a logo reaches Velo through `upload_file`.
-   - Without a shell (claude.ai, Cowork, Desktop): call `upload_file` with no `file_name`. Give the user the returned `upload_page_url` as a link and wait until they say they're done. Then call `list_files` with the returned `chat_id` to confirm the files arrived. It waits briefly while a file is still uploading.
-   - With a shell that can read the file (Claude Code): pass the file's absolute path as `file_name` (expand `~` first), its `size_bytes` and `content_type`, then run the returned curl command. For more files, call `upload_file` again with the same `chat_id`. Confirm with `list_files`.
+1. **Add files first, if there are any.** A document, a recording, audio, images or a logo reaches Velo only through the upload page, on every Claude app, Claude Code included.
+   - Call `upload_file` with no `files`. Give the user the returned `upload_page_url` as a link: they add the files in their browser and choose **Done uploading**. A file attached in this conversation or saved on the user's machine still goes through that page.
+   - Wait until the user says they're done. Then call `list_files` with the returned `chat_id` to confirm the files arrived. It waits briefly while a file is still uploading.
+   - For more files, call `upload_file` again with the same `chat_id` for a fresh link.
 2. **Start it with `create_video`.** Write `message` as a short brief for Velo, 2 to 5 sentences, from the whole conversation:
    - Say what the video is about, what each attached file shows, and the conditions the user set (length, audience, tone, a script review first).
    - Describe files only by what they show ("the attached deck is our Q3 pitch"), never by where they came from or how they were fetched.
@@ -51,6 +52,8 @@ The role here: write Velo a short brief, show the user everything Velo says and 
 ## Follow it
 
 Call `get_video_status` with the `chat_id`. While the video is Working or Finishing, the call waits for a change before it returns, so call it again right away; that is not a busy loop. On any other status, stop calling it and act on that status. If a call is rate limited, wait `retry_after_seconds` first.
+
+The user can also work on the video in Velo itself. `since_you_looked` lists what changed there since your last look. Acknowledge what the user did there in one line, without asking or showing it again, and apply their next request to the video as it is now. A question Velo asked since then is the one thing to show them.
 
 | status | What it means | Next |
 | --- | --- | --- |
