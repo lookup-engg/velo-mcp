@@ -22,7 +22,7 @@
         "category": "Productivity",
         "capabilities": ["Create videos", "Stay on brand", "Edit and update", "Find and access", "Track progress"],
         "websiteURL": "https://usevelo.ai",
-        "supportURL": "https://usevelo.ai/support",
+        "supportURL": "https://usevelo.ai",
         "privacyPolicyURL": "https://www.usevelo.ai/privacy",
         "termsOfServiceURL": "https://www.usevelo.ai/terms",
         "defaultPrompt": [
