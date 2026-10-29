@@ -1,8 +1,8 @@
 # Velo for Claude
 
-**Turn company knowledge into videos.**
+**Create on-brand product videos.**
 
-Create product demos, feature walkthroughs, customer onboarding videos, and internal training content with [Velo](https://usevelo.ai). Velo turns your Claude conversations, documents, and company knowledge into on-brand videos.
+Create product demos, feature walkthroughs, customer onboarding videos, and internal training content with [Velo](https://www.usevelo.ai). Velo turns your Claude conversations, documents, and company knowledge into on-brand videos.
 
 Connect your Velo workspace to combine existing conversation context with your company's product knowledge, source materials, and brand settings.
 
@@ -23,7 +23,7 @@ Start video creation from Claude and get completed videos in Velo to review, edi
 
 ## Requirements
 
-- A Velo account and workspace. Sign up at [usevelo.ai](https://usevelo.ai).
+- A Velo account and workspace. Sign up at [usevelo.ai](https://www.usevelo.ai).
 - Credits in that workspace for making and changing videos.
 
 ## Install and connect
@@ -52,7 +52,6 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `list_files` | Confirms which uploaded files are waiting to go to Velo. |
 | `list_voices` | Lists the narration voices you can use. |
 | `list_avatars` | Lists the AI presenters you can use. |
-| `get_credit_balance` | Shows your workspace's remaining credits and plan. |
 | `export_video` | Renders the current draft into the finished video. Free. |
 
 ## Credits
