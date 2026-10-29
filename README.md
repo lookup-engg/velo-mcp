@@ -7,12 +7,12 @@ Velo's MCP server (`https://api.usevelo.ai/mcp`) packaged for AI clients. The se
 | Folder | Client | Ships through |
 | --- | --- | --- |
 | `plugins/claude/` | Claude: claude.ai, Desktop, Cowork, Claude Code | Anthropic's plugin directory (plugin path `plugins/claude`), and the Claude Code marketplace in `.claude-plugin/marketplace.json` |
+| `plugins/openai/` | ChatGPT and Codex | A ZIP built by `scripts/build-openai-zip.sh` and uploaded at platform.openai.com. Codex also reads `.agents/plugins/marketplace.json`. See [plugins/openai/README.md](plugins/openai/README.md). |
 
 Each new client gets its own folder under `plugins/`:
 
 | Client | Folder | Notes |
 | --- | --- | --- |
-| ChatGPT and Codex | `plugins/openai/` | One plugin format for both. Uploaded as an archive at platform.openai.com, not read from this repo. See [Submit your Claude Code plugin to OpenAI](https://developers.openai.com/plugins/guides/submit-claude-plugin). |
 | Cursor | `plugins/cursor/` | Plus a root `.cursor-plugin/marketplace.json` that points at it. See [Cursor plugins](https://cursor.com/docs/reference/plugins). |
 | Gemini CLI | repo root | `gemini-extension.json` has to sit at the repo root. See [Gemini CLI extensions](https://geminicli.com/docs/extensions/reference/). |
 
