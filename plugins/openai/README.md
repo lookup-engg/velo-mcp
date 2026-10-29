@@ -6,7 +6,7 @@ OpenAI's plugin package for Velo. One package serves ChatGPT and Codex. OpenAI n
 | --- | --- |
 | `plugin.json` | Manifest in the [Agent Plugins](https://agent-plugins.org) format. `extensions.com.openai` holds the listing, the review test cases and the release notes. |
 | `mcp.json` | The Velo MCP server, `https://api.usevelo.ai/mcp`. No auth block: ChatGPT reads our OAuth metadata and registers itself (dynamic client registration). OpenAI documents an `extensions.com.openai.auth` override, but the Agent Plugins schema rejects it, and we don't need it. |
-| `skills/velo-video/SKILL.md` | The Claude plugin's skill, with provider-neutral wording, and uploads that pass files attached in the chat straight to `upload_file`. |
+| `skills/velo-video/` | The Claude plugin's skill and its prompt library (`references/prompt-library.md`), with provider-neutral wording, and uploads that pass files attached in the chat straight to `upload_file`. Keep both in step with `plugins/claude`: only the upload step differs. |
 | `assets/velo-icon.svg` | The Velo icon at 480 x 480. OpenAI needs SVG icons at least 48 x 48; the Claude copy is 20 x 20. |
 
 ## Try it before it's listed
