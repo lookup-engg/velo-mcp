@@ -44,34 +44,34 @@
         "test_cases": {
           "positive": [
             {
-              "description": "Start a video from a website",
-              "prompt": "Make a 10-second video about www.usevelo.ai",
-              "tools_triggered": "create_video, get_video_status",
-              "expected_behavior": "Starts a 10-second video with a short brief that points Velo at the website, follows it while Velo reads the site, then shows Velo's questions in full (every choice and the optional field) without writing a script or answering for the user."
+              "description": "Start a video from a website, with a chosen voice",
+              "prompt": "Make a 10-second video about www.usevelo.ai, narrated by the Adrian voice.",
+              "tools_triggered": "list_voices, create_video, get_video_status",
+              "expected_behavior": "Finds the Adrian voice, starts a 10-second video narrated by it with a short brief that points Velo at the website, follows it while Velo reads the site, then shows Velo's questions in full (every choice and the optional field) without writing a script or answering for the user."
             },
             {
-              "description": "Start a video from an attached document",
-              "prompt": "Turn the attached pitch deck into a narrated video.",
-              "tools_triggered": "upload_file, create_video, get_video_status",
-              "expected_behavior": "Passes the attached PDF to Velo, starts a video from the deck, follows it while Velo reads the deck, then shows Velo's questions about the video in full without answering for the user."
+              "description": "Create a product introduction video with an avatar presenter",
+              "prompt": "Create a 10 second product introduction video about Uber, presented by the Chloe avatar.",
+              "tools_triggered": "list_avatars, create_video, get_video_status",
+              "expected_behavior": "Finds the Chloe avatar, starts a 10-second avatar video introducing Uber with Chloe presenting, follows it, then shows Velo's questions in full (every choice, including the voice for Chloe, and the optional field) without answering for the user."
             },
             {
-              "description": "Show the script for review",
-              "prompt": "Show me the script for my latest Velo video.",
-              "tools_triggered": "list_videos, get_video_status",
-              "expected_behavior": "Finds the most recent video, shows every scene of its script word for word with its timing and visuals, then waits for the user's approval instead of approving it."
+              "description": "Show the latest video created in Velo",
+              "prompt": "What is my latest video in Velo",
+              "tools_triggered": "list_videos",
+              "expected_behavior": "Finds the most recent video and returns the link to the video's chat if there are any."
             },
             {
               "description": "List narration voices",
               "prompt": "Which narration voices can I use in Velo?",
               "tools_triggered": "list_voices",
-              "expected_behavior": "Lists every voice by name and description, grouped as the user's own, shared in the workspace and public, with a link to Velo's voice library to listen first. Nothing is selected."
+              "expected_behavior": "Lists every voice by name"
             },
             {
-              "description": "Export a finished draft",
-              "prompt": "Export my latest Velo video.",
-              "tools_triggered": "list_videos, export_video, get_video_status",
-              "expected_behavior": "Finds the most recent draft, renders it, follows the render until it's done, then gives the link to the finished video's share page."
+              "description": "List face avatars",
+              "prompt": "List the face avatars available in the workspace",
+              "tools_triggered": "list_avatars",
+              "expected_behavior": "List the available face clones in the workspace"
             }
           ],
           "negative": [
