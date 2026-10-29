@@ -12,28 +12,28 @@ description: >
 
 # Making videos with Velo
 
-Velo makes finished, narrated videos: explainers, product demos, pitch and launch videos, motion graphics and social clips. It works from a brief, a document, a screen recording, a public website or an AI presenter. Velo's own agent builds each video in a Velo chat; the Velo tools start it, relay the conversation and hand back the links.
+Velo makes animated, narrated videos: explainers, product demos, training modules, pitch and launch videos, motion graphics and social clips. It works from a brief, a document, a screen recording, a public website or an AI presenter. Velo's own agent builds each video in a Velo chat; the Velo tools start it, relay the conversation and hand back the links.
 
 The role here: write Velo a short, precise brief, show the user everything Velo says and asks, send back the user's answers and changes, and give them the links. Prompting Velo covers how to word what goes to Velo.
 
 ## How results read in chat
 
-- Show every link Velo returns as a short markdown link with words, such as [Open your video](url) or [Add your files](url). Never paste the raw URL, and never build or guess one.
+- Show every link Velo returns as a short markdown hyperlinks, such as [Open your video](url) or [Add your files](url). Never paste the raw URL, and never build or guess one.
 - Keep IDs (`chat_id`, voice, avatar, option and scene IDs) out of chat. Use them only in tool calls.
-- Use names and labels in every reply, confirmations included. Map the user's chosen name back to its ID when calling a tool.
+- Use names and labels in every reply, confirmations included. Map the user's choices back to its ID when calling a tool.
 - Say times and durations in plain words: "about 2 minutes", "an hour ago".
-- Describe choices and next steps in everyday language. Explain API fields only when the user asks for technical debugging.
+- Describe choices and next steps in everyday language.
 
 ## Start a video
 
 1. **Add files first, if there are any.** A document, a recording, audio, images or a logo reaches Velo only through the upload page, on every Claude app, Claude Code included.
    - Call `upload_file` with no `files`. Give the user the returned `upload_page_url` as a link: they add the files in their browser and choose **Done uploading**. A file attached in this conversation or saved on the user's machine still goes through that page.
-   - Wait until the user says they're done. Then call `list_files` with the returned `chat_id` to confirm the files arrived. It waits briefly while a file is still uploading.
-   - For more files, call `upload_file` again with the same `chat_id` for a fresh link.
+   - Wait until the user says they've uploaded the files. Then call `list_files` with the returned `chat_id` to confirm the files arrived. It waits briefly while a file is still uploading.
+   - To upload more files, call `upload_file` again with the same `chat_id` for a fresh link.
 2. **Start it with `create_video`.** Write `message` as a short brief for Velo, 2 to 5 sentences, from the whole conversation:
    - Say what the video is about, what each attached file shows, and the conditions the user set (length, audience, tone, a script review first).
    - Describe files only by what they show ("the attached deck is our Q3 pitch"), never by where they came from or how they were fetched.
-   - Shape it as Prompting Velo describes, from what the user said and gave. Leave out any script, scene list or facts dump of your own, and any detail the user left open. Velo's agent asks the user for what it needs.
+   - Shape it as "Prompting Velo" describes, from what the user said and gave. Leave out any script, scene list or facts dump of your own, and any detail the user left open. Velo's agent asks questions for what it needs.
    - If files were uploaded, pass that `chat_id`. The waiting files go with it. `files_left` says how many still wait for the next message; `files_refused` names any Velo couldn't take, with the reason.
 3. **Pick the `flow`** that matches the request:
 
@@ -43,7 +43,7 @@ The role here: write Velo a short, precise brief, show the user everything Velo 
 | `upload_pdf` | A video from a document (PDF, deck). | The document, through `upload_file` |
 | `upload_recording` | Polishing a screen recording. | The recording, through `upload_file` |
 | `record_yourself` | A video of the user talking. | That video, through `upload_file` |
-| `generate_with_avatar` | A video presented by an AI avatar. | Nothing |
+| `generate_with_avatar` | A video presented by an AI avatar or user's clone. | Nothing |
 
 - Pass `voice_id` or `avatar_id` only for one the user already chose (see Voices and avatars). Either one needs a `message` too.
 - If the user wants to review the script before Velo builds the video, say so in `message`, even for a video without narration.
@@ -51,26 +51,26 @@ The role here: write Velo a short, precise brief, show the user everything Velo 
 
 ## Follow it
 
-Call `get_video_status` with the `chat_id`. While the video is Working or Finishing, the call waits for a change before it returns, so call it again right away; that is not a busy loop. On any other status, stop calling it and act on that status. If a call is rate limited, wait `retry_after_seconds` first.
+Call `get_video_status` with the `chat_id` to get status of the video.
 
 The user can also work on the video in Velo itself. `since_you_looked` lists what changed there since your last look. Acknowledge what the user did there in one line, without asking or showing it again, and apply their next request to the video as it is now. A question Velo asked since then is the one thing to show them.
 
 | status | What it means | Next |
 | --- | --- | --- |
-| Working | Velo's agent is on it. `message` is its latest progress line. | Call `get_video_status` again. |
-| Needs your answer | Velo is waiting on the user: a question in `message`, a `pending_question`, or both. | Show it in full (see When Velo asks). |
+| Working | Velo's agent is on it. `message` is its latest progress line. | Call `get_video_status`. |
+| Needs your answer | Velo is waiting on the user: a question in `message`, a `pending_question`, or both. | Show it in full (see "When Velo asks"). |
 | Needs your action | Velo's browser needs the user, for example to sign in to a site (`pending_action`). | Send the user to `preview_url`: they choose Take control, sign in if needed, then Resume agent. Never ask for their credentials in chat. Once they're back, check the status again; sending a message doesn't resume that browser. |
 | Draft ready | A draft to watch at `preview_url`. `message` is Velo's reply and may ask something. | Show `message` and the link. Send answers or changes with `edit_video`. Export only when the user asks. |
-| Finishing | The final video is rendering. `render_percent` says how far along. | Call `get_video_status` again. |
+| Finishing | The final video is rendering. `render_percent` says how far along. | Call `get_video_status`. |
 | Done | The video is finished. `video_url` is its share page, present when sharing is on. | Give the user the links. |
-| Out of credits | Velo stopped for credits. `error.message` says why and how to resume. | See Credits. |
+| Out of credits | User has exhausted credits on Velo. `error.message` says why and how to resume. | See Credits. |
 | Failed | The last step didn't finish. `error.message` says what to do next. | Show it. Trying again (`edit_video` or `export_video`) is the user's call. |
 
 When `fix_attempt` is present, Velo is repairing a failed export on its own: keep following it.
 
 ## When Velo asks
 
-Velo asks one step at a time: usually the brief, then the script, then the voice. An avatar video also asks who presents. A question can come at any status, Draft ready included, so read `message` on every result.
+Velo asks one step at a time: usually the brief, then the script, then the voice. An avatar video also asks who should be the presenter. A question can come at any status, Draft ready included, so read `message` on every result.
 
 Present every question in plain chat text, whether it arrives in `message` or `pending_question`. Do not use native forms, question widgets or elicitation to collect the answer. Keep the full question: every choice (with its category), every optional field, and any script content. List every returned choice; don't trim the list.
 
@@ -78,7 +78,7 @@ Present every question in plain chat text, whether it arrives in `message` or `p
 
 - Reply with `edit_video` and no `pending_question_id`, written for Velo in a few sentences with the context it needs, keeping every condition the user gave.
 - If the user may have answered on the Velo page meanwhile, refresh `get_video_status` first: a question in `message` has no stale-question protection.
-- A `message` that ends in "…" was cut. The full text is in the Velo chat at `preview_url`.
+- A `message` that ends as truncated text "…" is partial. The full text is in the Velo chat at `preview_url`.
 
 ### `pending_question`
 
@@ -92,7 +92,7 @@ Present every question in plain chat text, whether it arrives in `message` or `p
 The script arrives as a `pending_question` of kind `script-review`, with every scene's narration in `scenes`.
 
 - Show the user every scene, word for word, by scene number or title. Never summarize or shorten the narration.
-- Wait for the user's explicit approval of this version. The first request, a voice choice or opening the voice library is not approval. Approving a script starts paid narration.
+- Wait for the user's explicit approval of this version. The first request, a voice choice or opening the voice library is not approval. Approving a script starts generating the narration.
 - For a clear, unconditional approval, send `message="approve"` with the script's `pending_question_id`. If the reply includes changes or conditions, or is ambiguous, send it as the user gave it instead.
 
 ### Answering for the user
@@ -162,7 +162,7 @@ Put these rules in any request that adds or changes a bounding box or the cursor
 
 ## Credits
 
-- `create_video` and `edit_video` spend credits; exporting doesn't.
+- Every action that Velo's agent performs costs credits. The user can see how many they have left in Velo's billing settings.
 - `get_credit_balance` gives the workspace's remaining credits and plan; with a `chat_id`, also what that video has cost so far.
 - Out of credits (the status, or an `insufficient_credits` error): the request is saved. A workspace owner adds credits in Velo's billing settings (other members ask an owner), then the user presses Continue in the Velo chat at `preview_url`. Don't send the request again.
 
