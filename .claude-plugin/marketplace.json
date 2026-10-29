@@ -9,7 +9,7 @@
     {
       "name": "velo",
       "source": "./plugins/claude",
-      "description": "Turn company knowledge into videos."
+      "description": "Create on-brand product videos."
     }
   ]
 }
