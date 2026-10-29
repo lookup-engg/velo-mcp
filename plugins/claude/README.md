@@ -52,7 +52,6 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `list_files` | Confirms which uploaded files are waiting to go to Velo. |
 | `list_voices` | Lists the narration voices you can use. |
 | `list_avatars` | Lists the AI presenters you can use. |
-| `get_credit_balance` | Shows your workspace's remaining credits and plan. |
 | `export_video` | Renders the current draft into the finished video. Free. |
 
 ## Credits

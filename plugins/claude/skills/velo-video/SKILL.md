@@ -165,7 +165,6 @@ Put these rules in any request that adds or changes a bounding box or the cursor
 ## Credits
 
 - Every action that Velo's agent performs costs credits. The user can see how many they have left in Velo's billing settings.
-- `get_credit_balance` gives the workspace's remaining credits and plan; with a `chat_id`, also what that video has cost so far.
 - Out of credits (the status, or an `insufficient_credits` error): the request is saved. A workspace owner adds credits in Velo's billing settings (other members ask an owner), then the user presses Continue in the Velo chat at `preview_url`. Don't send the request again.
 
 ## Errors and retries
