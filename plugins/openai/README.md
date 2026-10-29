@@ -31,6 +31,7 @@ For a new version: raise `version` in `plugin.json`, build and upload again. Too
 
 ## Before the first submission
 
+- Shorten `interface.shortDescription` to 30 characters or fewer. It holds marketing's tagline, "Turn your ChatGPT context into on-brand videos" (46): the ZIP uploads with it (package limit 240), but final submission allows 30.
 - Create the support page at `https://usevelo.ai/support`, which `interface.supportURL` points to. It returns 404 today.
 - Add `review.demo_recording_url` to `plugin.json`: a link to a demo video reviewers can open.
 - Review the draft test cases in `plugin.json`. Initial review needs exactly five positive and three negative cases.

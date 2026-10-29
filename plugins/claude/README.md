@@ -1,6 +1,20 @@
 # Velo for Claude
 
-[Velo](https://usevelo.ai) makes finished, narrated videos: explainers, product demos, pitch and launch videos, motion graphics and social clips. It works from a short brief, a document or deck, a screen recording, a public website, or an AI presenter. This plugin connects Claude to your Velo workspace so you can start, guide, edit and export Velo videos without leaving the conversation.
+**Turn your Claude context into on-brand videos.**
+
+Create product demos, feature walkthroughs, customer onboarding videos, and internal training content with [Velo](https://usevelo.ai). Velo turns your Claude conversations, documents, and company knowledge into on-brand videos.
+
+Connect your Velo workspace to combine existing conversation context with your company's product knowledge, source materials, and brand settings.
+
+## What you can do with Velo
+
+- **Create videos:** Generate videos from prompts, conversations, documents, URLs, and company knowledge.
+- **Stay on brand:** Apply existing Velo brand settings to maintain consistency across videos.
+- **Edit and update:** Revise videos using new product information, release notes, or updated training materials.
+- **Find and access:** Retrieve existing videos and projects from your connected Velo workspace.
+- **Track progress:** Check video creation status and access completed videos.
+
+Start video creation from Claude and get completed videos in Velo to review, edit, and share. Turn existing context into videos without rebuilding briefs or transferring information between tools.
 
 ## What's included
 
@@ -22,10 +36,9 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 
 ## Try it
 
-- "Make a 60-second explainer about our new onboarding flow with Velo."
-- "Turn the attached pitch deck into a video."
-- "Make a product demo video of https://example.com."
-- "Make a short video presented by an avatar announcing our Q4 launch."
+- "Create a 60-second product walkthrough from feature announcement, highlighting what's new and how it works."
+- "Turn this employee onboarding SOP into a step-by-step training video with narration and branded visuals."
+- "Create a 60-second product explainer video using the avatar from my Velo workspace and the product details in this conversation."
 - "What's the status of my Velo video?"
 - "Which voices can I use? Switch the narration to a warmer one."
 - "Export the final video."

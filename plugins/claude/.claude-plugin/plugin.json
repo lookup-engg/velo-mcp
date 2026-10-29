@@ -2,7 +2,7 @@
   "name": "velo",
   "displayName": "Velo",
   "version": "0.1.0",
-  "description": "Make narrated videos with Velo's agent: explainers, product demos, pitch and launch videos, and social clips from a brief, a document, a screen recording, a website or an AI presenter.",
+  "description": "Turn your Claude context into on-brand videos.",
   "author": {
     "name": "Velo",
     "email": "support@usevelo.ai",
