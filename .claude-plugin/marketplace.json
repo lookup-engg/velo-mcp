@@ -9,7 +9,7 @@
     {
       "name": "velo",
       "source": "./plugins/claude",
-      "description": "Make narrated videos with Velo's agent from Claude."
+      "description": "Turn company knowledge into videos."
     }
   ]
 }
