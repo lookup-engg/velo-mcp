@@ -12,7 +12,11 @@ OpenAI's plugin package for Velo. One package serves ChatGPT and Codex. OpenAI n
 ## Try it before it's listed
 
 - **ChatGPT:** in [ChatGPT Plugins](https://chatgpt.com/plugins), choose **+**, then **Add custom MCP server**. Enter `https://api.usevelo.ai/mcp`, choose OAuth, then **Create as a plugin**. Tools that change things, such as `create_video`, need a Business, Enterprise or Edu workspace with developer mode on (set by a workspace admin). After a backend deploy that changes tools, press **Refresh** on the connection.
-- **Codex:** `codex plugin marketplace add lookup-engg/velo-mcp` reads `.agents/plugins/marketplace.json` at the repo root, which points here. Install and test from the ChatGPT desktop app.
+- **Codex:** add the repo with a sparse checkout of only the Codex marketplace and this folder, then install and test from the ChatGPT desktop app:
+  ```sh
+  codex plugin marketplace add lookup-engg/velo-mcp --sparse .agents/plugins --sparse plugins/openai
+  ```
+  Without `--sparse`, Codex also reads the Claude marketplace (`.claude-plugin/marketplace.json`, which OpenAI supports as a legacy format), and would list the Claude plugin beside this one under the same name, `velo`.
 
 ## Build and submit
 
