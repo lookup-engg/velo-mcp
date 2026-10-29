@@ -6,9 +6,9 @@
   "author": {
     "name": "Velo",
     "email": "support@usevelo.ai",
-    "url": "https://usevelo.ai"
+    "url": "https://www.usevelo.ai"
   },
-  "homepage": "https://usevelo.ai",
+  "homepage": "https://www.usevelo.ai",
   "repository": "https://github.com/lookup-engg/velo-mcp",
   "license": "LicenseRef-Proprietary",
   "keywords": ["video", "video-generation", "explainer", "product-demo", "presentation"],
@@ -21,7 +21,7 @@
         "developerName": "Velo",
         "category": "Productivity",
         "capabilities": ["Create videos", "Stay on brand", "Edit and update", "Find and access", "Track progress"],
-        "websiteURL": "https://usevelo.ai",
+        "websiteURL": "https://www.usevelo.ai",
         "supportURL": "https://www.usevelo.ai",
         "privacyPolicyURL": "https://www.usevelo.ai/privacy",
         "termsOfServiceURL": "https://www.usevelo.ai/terms",

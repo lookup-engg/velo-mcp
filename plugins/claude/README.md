@@ -2,7 +2,7 @@
 
 **Create on-brand product videos.**
 
-Create product demos, feature walkthroughs, customer onboarding videos, and internal training content with [Velo](https://usevelo.ai). Velo turns your Claude conversations, documents, and company knowledge into on-brand videos.
+Create product demos, feature walkthroughs, customer onboarding videos, and internal training content with [Velo](https://www.usevelo.ai). Velo turns your Claude conversations, documents, and company knowledge into on-brand videos.
 
 Connect your Velo workspace to combine existing conversation context with your company's product knowledge, source materials, and brand settings.
 
@@ -23,7 +23,7 @@ Start video creation from Claude and get completed videos in Velo to review, edi
 
 ## Requirements
 
-- A Velo account and workspace. Sign up at [usevelo.ai](https://usevelo.ai).
+- A Velo account and workspace. Sign up at [usevelo.ai](https://www.usevelo.ai).
 - Credits in that workspace for making and changing videos.
 
 ## Install and connect

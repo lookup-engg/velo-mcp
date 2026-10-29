@@ -6,9 +6,9 @@
   "author": {
     "name": "Velo",
     "email": "support@usevelo.ai",
-    "url": "https://usevelo.ai"
+    "url": "https://www.usevelo.ai"
   },
-  "homepage": "https://usevelo.ai",
+  "homepage": "https://www.usevelo.ai",
   "repository": "https://github.com/lookup-engg/velo-mcp",
   "license": "LicenseRef-Proprietary",
   "keywords": ["video", "video-generation", "explainer", "product-demo", "presentation"],
