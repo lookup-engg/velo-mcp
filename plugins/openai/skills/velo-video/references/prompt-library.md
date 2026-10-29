@@ -1,8 +1,8 @@
-# Velo prompt library
+# Velo sample prompts
 
-Patterns for `message` in `create_video` and `edit_video`. Fill each [bracket] from what the user said, gave or connected. Drop a clause the user left open rather than guessing it: no invented timestamps, components, emphasis or style. The rules in the skill's Prompting Velo section apply to every pattern.
+Sample prompts for `message` in `create_video` and `edit_video`. Velo's video creation is intent and outcome driven: it works best from a simple explanation of what the finished video should achieve. Start from that outcome in the user's own words, then customise the closest sample as needed: keep what the user gave, shorten or drop the rest, and never fill a [bracket] with a guess, such as a timestamp, component, emphasis or style the user didn't give.
 
-## First videos (`create_video`)
+## For a first video (`create_video`)
 
 ### Ground it in real sources
 
@@ -43,7 +43,7 @@ Add a line or two for the style the user named:
 - **Narration:** pace ("slow and clear" for training, "brisk" for a short demo); tone (calm, friendly, matter-of-fact or upbeat); address (speak to the viewer as "you", or neutral and descriptive); density (a line per step, or lighter narration that lets the screen do the work).
 - **Visuals:** effect intensity ("subtle zooms" or "punchy, obvious emphasis"); cut pace (let each screen breathe, or tight and fast); overlays (heavy on-screen labels and callouts, or clean and minimal); overall feel ("clean and professional", "warm and approachable", "energetic").
 
-## Changes (`edit_video`)
+## For a change (`edit_video`)
 
 ### Focus and emphasis
 
@@ -109,19 +109,7 @@ Motion graphics for a section:
 Make [the 0:00-0:06 intro] a motion-graphics sequence: [the logo builds from its own shapes, then the title slides in]. Keep it [clean and on-brand]; leave the screen-recording sections untouched.
 ```
 
-### Audio and narration
-
-Add background music:
-
-```text
-Add [calm, low-energy] background music across the whole video, kept about [20%] under the narration. Fade in over the first [1s], out over the last [2s].
-```
-
-Change, adjust or remove music:
-
-```text
-Swap the music for something [more upbeat] from [0:30] on, same low volume under the voice. Remove it entirely between [1:10] and [1:25] so [the key step] is heard clearly. Change nothing else.
-```
+### Narration
 
 Rewrite the narration's words:
 
