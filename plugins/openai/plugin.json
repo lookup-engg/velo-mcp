@@ -44,48 +44,51 @@
         "test_cases": {
           "positive": [
             {
-              "description": "Start a video from a brief",
-              "prompt": "Make a 60-second explainer video about how our app's onboarding works, for new customers.",
+              "description": "Start a video from a website",
+              "prompt": "Make a 10-second video about www.usevelo.ai",
               "tools_triggered": "create_video, get_video_status",
-              "expected_behavior": "Starts a video with a short brief, follows it while Velo works, and shows Velo's first question in full without writing a script or answering for the user."
+              "expected_behavior": "Starts a 10-second video with a short brief that points Velo at the website, follows it while Velo reads the site, then shows Velo's questions in full (every choice and the optional field) without writing a script or answering for the user."
             },
             {
               "description": "Start a video from an attached document",
               "prompt": "Turn the attached pitch deck into a narrated video.",
               "tools_triggered": "upload_file, create_video, get_video_status",
-              "expected_behavior": "Passes the attached PDF to Velo, starts a video from the document, and shows Velo's first question or progress."
+              "expected_behavior": "Passes the attached PDF to Velo, starts a video from the deck, follows it while Velo reads the deck, then shows Velo's questions about the video in full without answering for the user."
             },
             {
               "description": "Show the script for review",
               "prompt": "Show me the script for my latest Velo video.",
               "tools_triggered": "list_videos, get_video_status",
-              "expected_behavior": "Finds the latest video and shows every scene of the script word for word, then waits for the user's approval instead of approving it."
+              "expected_behavior": "Finds the most recent video, shows every scene of its script word for word with its timing and visuals, then waits for the user's approval instead of approving it."
             },
             {
               "description": "List narration voices",
               "prompt": "Which narration voices can I use in Velo?",
               "tools_triggered": "list_voices",
-              "expected_behavior": "Lists the voices by name, grouped as the user's own, shared in the workspace and public, with a link to Velo's voice library."
+              "expected_behavior": "Lists every voice by name and description, grouped as the user's own, shared in the workspace and public, with a link to Velo's voice library to listen first. Nothing is selected."
             },
             {
               "description": "Export a finished draft",
               "prompt": "Export my latest Velo video.",
               "tools_triggered": "list_videos, export_video, get_video_status",
-              "expected_behavior": "Renders the latest draft, follows it until it's done, and gives the links to the finished video."
+              "expected_behavior": "Finds the most recent draft, renders it, follows the render until it's done, then gives the link to the finished video's share page."
             }
           ],
           "negative": [
             {
               "description": "Request unrelated to video",
-              "prompt": "What's the weather in Paris tomorrow?"
+              "prompt": "What's the weather in Paris tomorrow?",
+              "expected_behavior": "Calls no Velo tool, since the request isn't about video, and leaves Velo out of the answer."
             },
             {
               "description": "Deleting videos, which Velo's tools don't do",
-              "prompt": "Delete all my Velo videos."
+              "prompt": "Delete all my Velo videos.",
+              "expected_behavior": "Calls no Velo tool. Says Velo's tools can't delete videos, so nothing was removed, and may offer to list the videos with their links instead."
             },
             {
               "description": "Buying credits, which happens only in Velo",
-              "prompt": "Buy 500 more Velo credits for me."
+              "prompt": "Buy 500 more Velo credits for me.",
+              "expected_behavior": "Calls no Velo tool. Says credits can't be bought in the conversation and are added in Velo's billing settings, by a workspace owner, with no purchase link."
             }
           ]
         },
