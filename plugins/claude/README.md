@@ -1,6 +1,6 @@
 # Velo for Claude
 
-**Turn your Claude context into on-brand videos.**
+**Turn company knowledge into videos.**
 
 Create product demos, feature walkthroughs, customer onboarding videos, and internal training content with [Velo](https://usevelo.ai). Velo turns your Claude conversations, documents, and company knowledge into on-brand videos.
 
