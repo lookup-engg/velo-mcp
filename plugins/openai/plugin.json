@@ -19,7 +19,7 @@
         "shortDescription": "Create on-brand product videos",
         "longDescription": "Create product demos, feature walkthroughs, customer onboarding videos, and internal training content. Velo turns your ChatGPT conversations, documents, and company knowledge into on-brand videos.\n\nConnect your Velo workspace to combine existing conversation context with your company's product knowledge, source materials, and brand settings.\n\nWhat you can do with Velo:\n- Create videos: Turn prompts, conversations, documents, URLs, and company knowledge into videos.\n- Stay on brand: Apply your Velo workspace's brand settings to maintain consistency across videos.\n- Edit and update: Keep existing videos current as product features, processes, and documentation change.\n- Find and access: Retrieve existing videos and projects from your connected Velo workspace.\n- Track progress: Check video creation status and open completed videos in Velo for review, editing, and sharing.\n\nMove from conversation to video without rebuilding briefs or repeating context.",
         "developerName": "Velo",
-        "category": "Productivity",
+        "category": "Creativity",
         "capabilities": [
           "Create product demos and walkthroughs that clearly explain how features work.",
           "Turn documents, websites, and AI conversations into training and onboarding videos.",
