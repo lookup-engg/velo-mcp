@@ -39,9 +39,6 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 - "Create a 60-second product walkthrough from feature announcement, highlighting what's new and how it works."
 - "Turn this employee onboarding SOP into a step-by-step training video with narration and branded visuals."
 - "Create a 60-second product explainer video using the avatar from my Velo workspace and the product details in this conversation."
-- "What's the status of my Velo video?"
-- "Which voices can I use? Switch the narration to a warmer one."
-- "Export the final video."
 
 ## Tools
 
