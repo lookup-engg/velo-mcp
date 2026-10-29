@@ -14,7 +14,7 @@ description: >
 
 Velo makes finished, narrated videos: explainers, product demos, pitch and launch videos, motion graphics and social clips. It works from a brief, a document, a screen recording, a public website or an AI presenter. Velo's own agent builds each video in a Velo chat; the Velo tools start it, relay the conversation and hand back the links.
 
-The role here: write Velo a short brief, show the user everything Velo says and asks, send back the user's answers, and give them the links.
+The role here: write Velo a short, precise brief, show the user everything Velo says and asks, send back the user's answers and changes, and give them the links. Prompting Velo covers how to word what goes to Velo.
 
 ## How results read in chat
 
@@ -33,7 +33,7 @@ The role here: write Velo a short brief, show the user everything Velo says and 
 2. **Start it with `create_video`.** Write `message` as a short brief for Velo, 2 to 5 sentences, from the whole conversation:
    - Say what the video is about, what each attached file shows, and the conditions the user set (length, audience, tone, a script review first).
    - Describe files only by what they show ("the attached deck is our Q3 pitch"), never by where they came from or how they were fetched.
-   - Leave out any script, scene list or facts dump, and any detail the user left open. Velo's agent asks the user for what it needs.
+   - Shape it as Prompting Velo describes, from what the user said and gave. Leave out any script, scene list or facts dump of your own, and any detail the user left open. Velo's agent asks the user for what it needs.
    - If files were uploaded, pass that `chat_id`. The waiting files go with it. `files_left` says how many still wait for the next message; `files_refused` names any Velo couldn't take, with the reason.
 3. **Pick the `flow`** that matches the request:
 
@@ -109,12 +109,56 @@ Answers and selections come from the user. Choose for them only when they explic
 
 ## Changes, export and links
 
-- Changes go through `edit_video` with the video's `chat_id`, written for Velo with the context it needs. New files go through `upload_file` with that `chat_id` first; they go with the next `edit_video`.
+- Changes go through `edit_video` with the video's `chat_id`, worded as Prompting Velo describes. New files go through `upload_file` with that `chat_id` first; they go with the next `edit_video`.
 - While the video is Working, `edit_video` returns `busy`. Follow it with `get_video_status` and send once the status changes.
 - `export_video` renders the current draft into the finished video. Call it only when the user asks for the final video, then follow `get_video_status` until Done. Rendering is free; automatic repairs after a render error may use credits. Calling it again while rendering, or after a render, starts nothing.
 - `preview_url` is the video's Velo chat, where the user watches the draft, answers and edits.
 - `video_url` is the finished video's share page, not a file download.
 - `list_videos` lists the user's videos, most recently active first, with each one's status and link. `status` narrows it to `draft` or `rendered`; pass `next_cursor` back as `cursor` for the next page. Use it to find a video the user mentions.
+
+## Prompting Velo
+
+Velo's agent builds the video the brief describes and fills any gap with its own best guess, so the video is only as good as the brief and each change request. Shape every `message` to Velo this way, using only what the user said, attached or connected. A detail the user didn't give stays out, or Velo is told to ask about it.
+
+### A first brief
+
+- **Describe done, not just the topic:** what the video covers, in what order, for whom, and what a finished, correct video looks like. "A demo" is a topic; "a 4-step demo for new trial users that ends on a shared report" is a destination.
+- **Point Velo at the real thing:** the attached screenshots, document or recording (by what each shows), a URL, or a source the user connected in Velo, such as a knowledge base or an app, by name. Tell Velo to follow it.
+- **Concrete actions over intent:** what the viewer sees happen on screen ("click Connect, choose a source, land on the dashboard"), not "demonstrate the integration".
+- **Emphasis:** what the viewer must remember, and what to keep brief.
+- **Gaps:** tell Velo to leave out or ask about anything the sources don't cover, so the video never shows a step that doesn't exist.
+- **Style the user named:** narration (pace, tone, speaking to the viewer as "you" or staying neutral, a line per step or lighter narration) and visuals (subtle or punchy effects, cut pace, heavy or minimal on-screen labels, overall feel).
+
+When a product video has no real material yet, suggest once that the user adds screenshots of the real UI, a help article or a URL: real screenshots are the fastest way to an accurate product video. Then start with what they have.
+
+### A change request
+
+A draft is usually close. Word each change so Velo places it exactly:
+
+- **Lock what works:** end nearly every change with "Change only this; leave everything else exactly as it is."
+- **Anchor three ways at once:** the narration words, the on-screen component, and where it sits. "When the narration says 'choose the report type', box the 'Report type' field" places it; "add a box near the top" doesn't. Quote narration from the script shown in this conversation, when there is one.
+- **Time it to the narration:** an effect lands when the narration reaches its line, not at the start of the scene. Name the trigger line, and the timestamp when the user gave one.
+- **Problem, target, and what to avoid:** what's wrong now, what right looks like, and the feel to rule out.
+
+When a change aims at one moment and the user hasn't said which line, component or time, ask them before sending it.
+
+### Bounding boxes and the cursor
+
+Put these rules in any request that adds or changes a bounding box or the cursor:
+
+- **Bounding boxes:**
+  - Only one box on screen at a time: remove the previous one before the next.
+  - Ground the box to the narration words, the component and where it sits on screen.
+  - Size it to the component's actual height and width, built from the component's centre with 5px padding so it never overlaps the component.
+  - Thin border, colour #242424, with no caption or label text.
+  - Skip the box when the component is the only thing on screen.
+- **Cursor:**
+  - It follows the same boxes and narration.
+  - It points to the component and never covers or overlaps it.
+
+### Prompt library
+
+[references/prompt-library.md](references/prompt-library.md) has a ready pattern for each kind of first video (product demo, support how-to, training, feature announcement) and each kind of change (focus and emphasis, on-screen graphics, audio and narration, captions, structure and timing). Read it when writing a brief or a change: start from the matching pattern, fill its [brackets] from the user's words, and drop any part they left open.
 
 ## Credits
 
@@ -137,6 +181,7 @@ A failed call returns `code`, `message` and `retryable`, plus `retry_after_secon
 ## Avoid
 
 - Writing a script, scene list or details the user left open into the brief.
+- Filling a prompt pattern's [brackets] with guesses: a timestamp, component, emphasis or style the user didn't give.
 - Answering Velo's questions or approving a script on the user's behalf.
 - Summarizing Velo's script or questions: show them whole.
 - Inventing URLs, voices, avatars or previews.
