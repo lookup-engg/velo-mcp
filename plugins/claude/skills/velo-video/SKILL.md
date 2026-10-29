@@ -14,7 +14,7 @@ description: >
 
 Velo makes finished, narrated videos: explainers, product demos, pitch and launch videos, motion graphics and social clips. It works from a brief, a document, a screen recording, a public website or an AI presenter. Velo's own agent builds each video in a Velo chat; the Velo tools start it, relay the conversation and hand back the links.
 
-The role here: write Velo a short, precise brief, show the user everything Velo says and asks, send back the user's answers and changes, and give them the links. Prompting Velo covers how to word what goes to Velo.
+The role here: write Velo a short brief that says what the video should achieve, show the user everything Velo says and asks, send back the user's answers and changes, and give them the links. Prompting Velo covers how to word what goes to Velo.
 
 ## How results read in chat
 
@@ -118,11 +118,13 @@ Answers and selections come from the user. Choose for them only when they explic
 
 ## Prompting Velo
 
-Velo's agent builds the video the brief describes and fills any gap with its own best guess, so the video is only as good as the brief and each change request. Shape every `message` to Velo this way, using only what the user said, attached or connected. A detail the user didn't give stays out, or Velo is told to ask about it.
+Velo's video creation is intent and outcome driven: it works best from a simple explanation of what the finished video should achieve. Lead every `message` to Velo with that outcome in plain words, then add only what the user said, attached or connected. A detail the user didn't give stays out, or Velo is told to ask about it.
 
 ### A first brief
 
-- **Describe done, not just the topic:** what the video covers, in what order, for whom, and what a finished, correct video looks like. "A demo" is a topic; "a 4-step demo for new trial users that ends on a shared report" is a destination.
+Start with the outcome; add the other points only when the user gave them.
+
+- **The outcome:** what the finished video should achieve, and for whom. "A demo" is a topic; "a 4-step demo for new trial users that ends on a shared report" is an outcome.
 - **Point Velo at the real thing:** the attached screenshots, document or recording (by what each shows), a URL, or a source the user connected in Velo, such as a knowledge base or an app, by name. Tell Velo to follow it.
 - **Concrete actions over intent:** what the viewer sees happen on screen ("click Connect, choose a source, land on the dashboard"), not "demonstrate the integration".
 - **Emphasis:** what the viewer must remember, and what to keep brief.
@@ -156,9 +158,9 @@ Put these rules in any request that adds or changes a bounding box or the cursor
   - It follows the same boxes and narration.
   - It points to the component and never covers or overlaps it.
 
-### Prompt library
+### Sample prompts
 
-[references/prompt-library.md](references/prompt-library.md) has a ready pattern for each kind of first video (product demo, support how-to, training, feature announcement) and each kind of change (focus and emphasis, on-screen graphics, audio and narration, captions, structure and timing). Read it when writing a brief or a change: start from the matching pattern, fill its [brackets] from the user's words, and drop any part they left open.
+[references/prompt-library.md](references/prompt-library.md) has a sample prompt for each kind of first video (product demo, support how-to, training, feature announcement) and each kind of change (focus and emphasis, on-screen graphics, narration, captions, structure and timing). Read it when writing a brief or a change, and customise the closest sample to the request: keep what the user gave, and shorten or drop the rest.
 
 ## Credits
 
@@ -181,7 +183,7 @@ A failed call returns `code`, `message` and `retryable`, plus `retry_after_secon
 ## Avoid
 
 - Writing a script, scene list or details the user left open into the brief.
-- Filling a prompt pattern's [brackets] with guesses: a timestamp, component, emphasis or style the user didn't give.
+- Filling a sample prompt's [brackets] with guesses: a timestamp, component, emphasis or style the user didn't give.
 - Answering Velo's questions or approving a script on the user's behalf.
 - Summarizing Velo's script or questions: show them whole.
 - Inventing URLs, voices, avatars or previews.
