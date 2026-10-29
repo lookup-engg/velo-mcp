@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "velo": {
+      "type": "http",
+      "url": "https://api.usevelo.ai/mcp"
+    }
+  }
+}
