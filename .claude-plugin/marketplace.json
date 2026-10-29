@@ -1,0 +1,15 @@
+{
+  "name": "velo",
+  "owner": {
+    "name": "Velo",
+    "email": "support@usevelo.ai"
+  },
+  "description": "Velo's plugins for Claude.",
+  "plugins": [
+    {
+      "name": "velo",
+      "source": "./plugins/claude",
+      "description": "Make narrated videos with Velo's agent from Claude."
+    }
+  ]
+}
