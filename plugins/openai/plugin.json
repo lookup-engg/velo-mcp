@@ -19,7 +19,7 @@
         "shortDescription": "Create on-brand product videos",
         "longDescription": "Create product demos, feature walkthroughs, customer onboarding videos, and internal training content. Velo turns your ChatGPT conversations, documents, and company knowledge into on-brand videos.\n\nConnect your Velo workspace to combine existing conversation context with your company's product knowledge, source materials, and brand settings.\n\nWhat you can do with Velo:\n- Create videos: Turn prompts, conversations, documents, URLs, and company knowledge into videos.\n- Stay on brand: Apply your Velo workspace's brand settings to maintain consistency across videos.\n- Edit and update: Keep existing videos current as product features, processes, and documentation change.\n- Find and access: Retrieve existing videos and projects from your connected Velo workspace.\n- Track progress: Check video creation status and open completed videos in Velo for review, editing, and sharing.\n\nMove from conversation to video without rebuilding briefs or repeating context.",
         "developerName": "Velo",
-        "category": "Productivity",
+        "category": "Creativity",
         "capabilities": [
           "Create product demos and walkthroughs that clearly explain how features work.",
           "Turn documents, websites, and AI conversations into training and onboarding videos.",
@@ -44,48 +44,51 @@
         "test_cases": {
           "positive": [
             {
-              "description": "Start a video from a brief",
-              "prompt": "Make a 60-second explainer video about how our app's onboarding works, for new customers.",
-              "tools_triggered": "create_video, get_video_status",
-              "expected_behavior": "Starts a video with a short brief, follows it while Velo works, and shows Velo's first question in full without writing a script or answering for the user."
+              "description": "Start a video from a website, with a chosen voice",
+              "prompt": "Make a 10-second video about www.usevelo.ai, narrated by the Adrian voice.",
+              "tools_triggered": "list_voices, create_video, get_video_status",
+              "expected_behavior": "Finds the Adrian voice, starts a 10-second video narrated by it with a short brief that points Velo at the website, follows it while Velo reads the site, then shows Velo's questions in full (every choice and the optional field) without writing a script or answering for the user."
             },
             {
-              "description": "Start a video from an attached document",
-              "prompt": "Turn the attached pitch deck into a narrated video.",
-              "tools_triggered": "upload_file, create_video, get_video_status",
-              "expected_behavior": "Passes the attached PDF to Velo, starts a video from the document, and shows Velo's first question or progress."
+              "description": "Create a product introduction video with an avatar presenter",
+              "prompt": "Create a 10 second product introduction video about Uber, presented by the Chloe avatar.",
+              "tools_triggered": "list_avatars, create_video, get_video_status",
+              "expected_behavior": "Finds the Chloe avatar, starts a 10-second avatar video introducing Uber with Chloe presenting, follows it, then shows Velo's questions in full (every choice, including the voice for Chloe, and the optional field) without answering for the user."
             },
             {
-              "description": "Show the script for review",
-              "prompt": "Show me the script for my latest Velo video.",
-              "tools_triggered": "list_videos, get_video_status",
-              "expected_behavior": "Finds the latest video and shows every scene of the script word for word, then waits for the user's approval instead of approving it."
+              "description": "Show the latest video created in Velo",
+              "prompt": "What is my latest video in Velo",
+              "tools_triggered": "list_videos",
+              "expected_behavior": "Finds the most recent video and returns the link to the video's chat if there are any."
             },
             {
               "description": "List narration voices",
               "prompt": "Which narration voices can I use in Velo?",
               "tools_triggered": "list_voices",
-              "expected_behavior": "Lists the voices by name, grouped as the user's own, shared in the workspace and public, with a link to Velo's voice library."
+              "expected_behavior": "Lists every voice by name"
             },
             {
-              "description": "Export a finished draft",
-              "prompt": "Export my latest Velo video.",
-              "tools_triggered": "list_videos, export_video, get_video_status",
-              "expected_behavior": "Renders the latest draft, follows it until it's done, and gives the links to the finished video."
+              "description": "List face avatars",
+              "prompt": "List the face avatars available in the workspace",
+              "tools_triggered": "list_avatars",
+              "expected_behavior": "List the available face clones in the workspace"
             }
           ],
           "negative": [
             {
               "description": "Request unrelated to video",
-              "prompt": "What's the weather in Paris tomorrow?"
+              "prompt": "What's the weather in Paris tomorrow?",
+              "expected_behavior": "Calls no Velo tool, since the request isn't about video, and leaves Velo out of the answer."
             },
             {
               "description": "Deleting videos, which Velo's tools don't do",
-              "prompt": "Delete all my Velo videos."
+              "prompt": "Delete all my Velo videos.",
+              "expected_behavior": "Calls no Velo tool. Says Velo's tools can't delete videos, so nothing was removed, and may offer to list the videos with their links instead."
             },
             {
               "description": "Buying credits, which happens only in Velo",
-              "prompt": "Buy 500 more Velo credits for me."
+              "prompt": "Buy 500 more Velo credits for me.",
+              "expected_behavior": "Calls no Velo tool. Says credits can't be bought in the conversation and are added in Velo's billing settings, by a workspace owner, with no purchase link."
             }
           ]
         },
