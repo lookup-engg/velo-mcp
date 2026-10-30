@@ -21,7 +21,7 @@ Create a product demo of [product] for [audience, e.g. new trial users]. Use the
 ### Support or how-to explainer
 
 ```text
-Create a support explainer answering exactly: "[the question, e.g. How do I reset my password?]" Show the full path as it appears in [product], grounded in [the help-centre article, connected] and the screenshots I've attached. Spend the most time on the step people get wrong: [the common mistake]. Done when someone stuck could follow along and finish. Stay on this one task only.
+Create a support explainer answering exactly: "[the question, e.g. How do I export a report?]" Show the full path as it appears in [product], grounded in [the help-centre article, connected] and the screenshots I've attached. Spend the most time on the step people get wrong: [the common mistake]. Done when someone stuck could follow along and finish. Stay on this one task only.
 ```
 
 ### Training or onboarding video
