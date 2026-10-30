@@ -59,7 +59,7 @@ The user can also work on the video in Velo itself. `since_you_looked` lists wha
 | --- | --- | --- |
 | Working | Velo's agent is on it. `message` is its latest progress line. | Call `get_video_status`. |
 | Needs your answer | Velo is waiting on the user: a question in `message`, a `pending_question`, or both. | Show it in full (see "When Velo asks"). |
-| Needs your action | Velo's browser needs the user, for example to sign in to a site (`pending_action`). | Send the user to `preview_url`: they choose Take control, sign in if needed, then Resume agent. Never ask for their credentials in chat. Once they're back, check the status again; sending a message doesn't resume that browser. |
+| Needs your action | Velo's browser needs the user, for example to sign in to a site (`pending_action`). | Send the user to `preview_url`: they choose Take control, sign in if needed, then Resume agent. That sign-in happens in Velo's browser, never in this chat. Once they're back, check the status again; sending a message doesn't resume that browser. |
 | Draft ready | A draft to watch at `preview_url`. `message` is Velo's reply and may ask something. | Show `message` and the link. Send answers or changes with `edit_video`. Export only when the user asks. |
 | Finishing | The final video is rendering. `render_percent` says how far along. | Call `get_video_status`. |
 | Done | The video is finished. `video_url` is its share page, present when sharing is on. | Give the user the links. |
