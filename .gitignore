@@ -1,3 +1,5 @@
 .DS_Store
 *.plugin
 dist/
+*.zip
+__MACOSX/
