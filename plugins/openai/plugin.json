@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "velo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Create product demos, feature walkthroughs, customer onboarding videos, and internal training content. Velo turns your ChatGPT conversations, documents, and company knowledge into on-brand videos.",
   "author": {
     "name": "Velo",
@@ -72,6 +72,18 @@
               "prompt": "List the face avatars available in the workspace",
               "tools_triggered": "list_avatars",
               "expected_behavior": "List the available face clones in the workspace"
+            },
+            {
+              "description": "Browse the workspace's Assets",
+              "prompt": "Which images do we have in Velo Assets?",
+              "tools_triggered": "list_assets",
+              "expected_behavior": "Lists every image in the workspace's Assets by name, with who added it, and links Velo's Assets page with a short link label. Shows no IDs or raw URLs."
+            },
+            {
+              "description": "Use a file from Assets in a new video",
+              "prompt": "Make a 10-second intro video about www.usevelo.ai that uses our logo from Velo Assets.",
+              "tools_triggered": "list_assets, create_video, get_video_status",
+              "expected_behavior": "Finds the logo in Assets (asking which one if several match), starts a 10-second video with that file chosen so Velo doesn't ask which assets to use, follows it, then shows Velo's questions in full without answering for the user."
             }
           ],
           "negative": [
@@ -89,6 +101,11 @@
               "description": "Buying credits, which happens only in Velo",
               "prompt": "Buy 500 more Velo credits for me.",
               "expected_behavior": "Calls no Velo tool. Says credits can't be bought in the conversation and are added in Velo's billing settings, by a workspace owner, with no purchase link."
+            },
+            {
+              "description": "Deleting a file from Assets, which Velo's tools don't do",
+              "prompt": "Delete my logo from Velo Assets.",
+              "expected_behavior": "Calls at most list_assets, to get the link to Velo's Assets page. Says the file can't be deleted from the conversation, gives that link with a short label so the user can remove it there, and doesn't claim it was deleted."
             }
           ]
         },
