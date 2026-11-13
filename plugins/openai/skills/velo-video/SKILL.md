@@ -6,8 +6,9 @@ description: >
   "turn this PDF (or deck, or screen recording) into a video", "make a video of this
   website", or "a video presented by an avatar". It also applies when following a
   Velo video ("check on my Velo video", "is my video ready?"), when Velo asks the
-  user something (the brief, script approval, a voice or an avatar), when changing a
-  draft, and when exporting or sharing a finished video.
+  user something (the brief, which Assets to use, script approval, a voice or an
+  avatar), when changing a draft, when exporting or sharing a finished video, and
+  when browsing, adding or removing files in the workspace's Velo Assets.
 ---
 
 # Making videos with Velo
@@ -18,8 +19,8 @@ The role here: write Velo a short brief that says what the video should achieve,
 
 ## How results read in chat
 
-- Show every link Velo returns as a short markdown hyperlinks, such as [Open your video](url) or [Add your files](url). Never paste the raw URL, and never build or guess one.
-- Keep IDs (`chat_id`, voice, avatar, option and scene IDs) out of chat. Use them only in tool calls.
+- Show every link Velo returns as a short markdown hyperlinks, such as [Open your video](url), [Add your files](url) or [Open Assets](url). Never paste the raw URL, and never build or guess one.
+- Keep IDs (`chat_id`, voice, avatar, asset, option and scene IDs) out of chat. Use them only in tool calls.
 - Use names and labels in every reply, confirmations included. Map the user's choices back to its ID when calling a tool.
 - Say times and durations in plain words: "about 2 minutes", "an hour ago".
 - Describe choices and next steps in everyday language.
@@ -30,6 +31,7 @@ The role here: write Velo a short brief that says what the video should achieve,
    - Files the user attached in this conversation: pass them in `files`. Velo adds them directly and returns them in `files`. Any it couldn't take come back in `refused`, with the reason and an `upload_page_url` for adding them another way.
    - Any other file, such as one saved on the user's computer: call `upload_file` with no `files`. Give the user the returned `upload_page_url` as a link: they add the files in their browser and choose **Done uploading**. Wait until the user says they've uploaded the files, then call `list_files` with the returned `chat_id` to confirm the files arrived. It waits briefly while a file is still uploading.
    - To upload more files, call `upload_file` again with the same `chat_id` for a fresh link.
+   - A file already in the workspace's Assets needs no upload: see Assets.
 2. **Start it with `create_video`.** Write `message` as a short brief for Velo, 2 to 5 sentences, from the whole conversation:
    - Say what the video is about, what each attached file shows, and the conditions the user set (length, audience, tone, a script review first).
    - Describe files only by what they show ("the attached deck is our Q3 pitch"), never by where they came from or how they were fetched.
@@ -46,6 +48,7 @@ The role here: write Velo a short brief that says what the video should achieve,
 | `generate_with_avatar` | A video presented by an AI avatar or user's clone. | Nothing |
 
 - Pass `voice_id` or `avatar_id` only for one the user already chose (see Voices and avatars). Either one needs a `message` too.
+- Pass `asset_ids` only for files the user chose from Assets (see Assets). It needs a `message` too.
 - If the user wants to review the script before Velo builds the video, say so in `message`, even for a video without narration.
 - Starting a video never approves a later script.
 
@@ -70,7 +73,7 @@ When `fix_attempt` is present, Velo is repairing a failed export on its own: kee
 
 ## When Velo asks
 
-Velo asks one step at a time: usually the brief, then the script, then the voice. An avatar video also asks who should be the presenter. A question can come at any status, Draft ready included, so read `message` on every result.
+Velo asks one step at a time: usually the brief, then the script, then the voice. An avatar video also asks who should be the presenter. A new video in a workspace with Assets may also ask which files to use (see Assets). A question can come at any status, Draft ready included, so read `message` on every result.
 
 Present every question in plain chat text, whether it arrives in `message` or `pending_question`. Do not use native forms, question widgets or elicitation to collect the answer. Keep the full question: every choice (with its category), every optional field, and any script content. List every returned choice; don't trim the list.
 
@@ -106,6 +109,18 @@ Answers and selections come from the user. Choose for them only when they explic
 - `voices_url` opens Velo's voice library, where the user can listen before choosing. Opening it selects nothing.
 - Send the pick with `edit_video`: the user's words in `message`, the ID as `voice_id` or `avatar_id` (an avatar can take a `voice_id` too), and the `pending_question_id` when it answers a question.
 - Show only previews Velo supplies. Don't add stock or illustrative portraits.
+
+## Assets
+
+Assets is the workspace's shared library of files: images, video, audio, and documents such as PDFs, slides and HTML pages. Members add a file once and use it in any video.
+
+- **Browse and search:** `list_assets` lists the files. `query` matches file names; `kind` narrows to `image`, `video`, `audio` or `document`. While `has_more` is true, pass `offset` for the next page. Show each file by name, with its kind and who added it ("you" or "a teammate"). It returns names and details, not what's inside a file.
+- **Open a file:** `view_url` opens it for the user and stops working after about an hour. Show it as a link only when the user wants to see the file, never hand it on, and call `list_assets` again for a fresh one. `assets_url` opens Velo's Assets page.
+- **Add to Assets:** files the user attached in this conversation go in `files` to `upload_asset`. Velo adds them directly and returns them in `added`. Any it couldn't take come back in `refused`, with the reason and an `upload_page_url` for adding them another way. For any other file, call `upload_asset` with no `files` and give the user the returned `upload_page_url` as a link: they add the files in their browser and choose **Done uploading**. Wait until the user says they're done, then call `list_assets` to confirm the files arrived.
+- **Assets or one video:** a file in Assets is for the whole workspace and can go in any video. `upload_file` adds a file to one video only. Use `upload_asset` only when the user wants the file in Assets.
+- **Use Assets in a new video:** pass the files the user chose as `asset_ids` in `create_video`, at most 10, with a `message`. Velo then doesn't ask which assets to use. When the user names a file loosely ("our logo"), find it with `list_assets`, and ask which one when several match.
+- **The asset question:** without `asset_ids`, a new video in a workspace with Assets asks which files to use. It arrives as a `pending_question` of kind `asset-picker`, with Velo's suggestions in `options`, best first, and `assets_url` beside it. List every option by name, with its label, and say the user can pick up to 10, name others from Assets, or use none. They can browse with `list_assets` or on the Assets page. Send the picks with `edit_video`: the `pending_question_id` and `answers={"assets": [...]}` with their IDs, from the options or from `list_assets`. `[]` means use none.
+- **Remove a file:** no tool deletes from Assets. Give the user `assets_url` as a link and say they remove the file there. Never say a file was deleted.
 
 ## Changes, export and links
 
@@ -185,5 +200,6 @@ A failed call returns `code`, `message` and `retryable`, plus `retry_after_secon
 - Filling a sample prompt's [brackets] with guesses: a timestamp, component, emphasis or style the user didn't give.
 - Answering Velo's questions or approving a script on the user's behalf.
 - Summarizing Velo's script or questions: show them whole.
-- Inventing URLs, voices, avatars or previews.
+- Inventing URLs, voices, avatars, assets or previews.
+- Saying a file was deleted from Assets: no tool deletes one.
 - Calling `get_video_status` again on any status other than Working or Finishing.
