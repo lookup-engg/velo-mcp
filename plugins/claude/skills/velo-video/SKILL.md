@@ -8,7 +8,7 @@ description: >
   Velo video ("check on my Velo video", "is my video ready?"), when Velo asks the
   user something (the brief, which Assets to use, script approval, a voice or an
   avatar), when changing a draft, when exporting or sharing a finished video, and
-  when browsing, adding or removing files in the workspace's Velo Assets.
+  when browsing, adding, replacing or removing files in the workspace's Velo Assets.
 ---
 
 # Making videos with Velo
@@ -114,12 +114,13 @@ Answers and selections come from the user. Choose for them only when they explic
 
 Assets is the workspace's shared library of files: images, video, audio, and documents such as PDFs, slides and HTML pages. Members add a file once and use it in any video.
 
-- **Browse and search:** `list_assets` lists the files. `query` matches file names; `kind` narrows to `image`, `video`, `audio` or `document`. While `has_more` is true, pass `offset` for the next page. Show each file by name, with its kind and who added it ("you" or "a teammate"). It returns names and details, not what's inside a file.
+- **Browse and search:** `list_assets` lists the files. `query` matches file names; `kind` narrows to `image`, `video`, `audio` or `document`. While `has_more` is true, pass `offset` for the next page. Show each file by name, with its kind, who added it (`added_by`: "you" or their name) and when. When it matters, also say how many videos use it (`used_in_videos`, with the ones the user can open in `used_in`: open one with `get_video_status` and its `chat_id`) and whether Velo has finished reading it (`summary_status`: `pending` or `processing` while it reads, `failed` if it couldn't). It returns names and details, not what's inside a file or its description.
 - **Open a file:** `view_url` opens it for the user and stops working after about an hour. Show it as a link only when the user wants to see the file, never hand it on, and call `list_assets` again for a fresh one. `assets_url` opens Velo's Assets page.
 - **Add to Assets:** a file reaches Assets only through the upload page, on every Claude app, Claude Code included. Call `upload_asset` with no `files` and give the user the returned `upload_page_url` as a link: they add the files in their browser and choose **Done uploading**. A file attached in this conversation still goes through that page. Wait until the user says they're done, then call `list_assets` to confirm the files arrived.
 - **Assets or one video:** a file in Assets is for the whole workspace and can go in any video. `upload_file` adds a file to one video only. Use `upload_asset` only when the user wants the file in Assets.
 - **Use Assets in a new video:** pass the files the user chose as `asset_ids` in `create_video`, at most 10, with a `message`. Velo then doesn't ask which assets to use. When the user names a file loosely ("our logo"), find it with `list_assets`, and ask which one when several match.
-- **The asset question:** without `asset_ids`, a new video in a workspace with Assets asks which files to use. It arrives as a `pending_question` of kind `asset-picker`, with Velo's suggestions in `options`, best first, and `assets_url` beside it. List every option by name, with its label, and say the user can pick up to 10, name others from Assets, or use none. They can browse with `list_assets` or on the Assets page. Send the picks with `edit_video`: the `pending_question_id` and `answers={"assets": [...]}` with their IDs, from the options or from `list_assets`. `[]` means use none.
+- **The asset question:** without `asset_ids`, a new video in a workspace with more than 3 files in Assets asks which files to use. With 3 or fewer, Velo uses the ones that fit without asking and says which it used. It arrives as a `pending_question` of kind `asset-picker`, with Velo's suggestions in `options`, best first, and `assets_url` beside it. List every option by name, with its label, and say the user can pick up to 10, name others from Assets, or use none. They can browse with `list_assets` or on the Assets page. Send the picks with `edit_video`: the `pending_question_id` and `answers={"assets": [...]}` with their IDs, from the options or from `list_assets`. `[]` means use none.
+- **Replace a file:** when the user wants a newer version of a file in Assets, call `replace_asset` with its `asset_id` from `list_assets` and no `files`. Give the user the returned `assets_url` as a link and say they choose **Replace…** in that file's menu. The file keeps its place; Velo reads the new one again, and videos that already used the old file keep it. Only the person who added it or a workspace admin can replace it.
 - **Remove a file:** no tool deletes from Assets. Give the user `assets_url` as a link and say they remove the file there. Never say a file was deleted.
 
 ## Changes, export and links
