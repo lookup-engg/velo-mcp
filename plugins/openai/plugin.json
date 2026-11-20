@@ -68,6 +68,12 @@
               "expected_behavior": "Lists every voice by name"
             },
             {
+              "description": "Read the workspace glossary",
+              "prompt": "How does Velo pronounce the words in my workspace glossary?",
+              "tools_triggered": "get_glossary",
+              "expected_behavior": "Lists each glossary term with how it is said, and says the glossary is edited in Velo, with its link. On a free plan it says the glossary needs a paid plan."
+            },
+            {
               "description": "List face avatars",
               "prompt": "List the face avatars available in the workspace",
               "tools_triggered": "list_avatars",
