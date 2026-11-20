@@ -47,6 +47,7 @@ The role here: write Velo a short brief that says what the video should achieve,
 | `generate_with_avatar` | A video presented by an AI avatar or user's clone. | Nothing |
 
 - Pass `voice_id` or `avatar_id` only for one the user already chose (see Voices and avatars). Either one needs a `message` too.
+- Pass `template_id` only when the user asked for a template (see Templates).
 - If the user wants to review the script before Velo builds the video, say so in `message`, even for a video without narration.
 - Starting a video never approves a later script.
 
@@ -107,6 +108,14 @@ Answers and selections come from the user. Choose for them only when they explic
 - `voices_url` opens Velo's voice library, where the user can listen before choosing. Opening it selects nothing.
 - Send the pick with `edit_video`: the user's words in `message`, the ID as `voice_id` or `avatar_id` (an avatar can take a `voice_id` too), and the `pending_question_id` when it answers a question.
 - Show only previews Velo supplies. Don't add stock or illustrative portraits.
+
+## Templates
+
+- `list_templates` lists the templates the user can start a video from: Velo's own (`made_by: velo`), then the ones their team saved in the workspace (`made_by: workspace`, with `created_by`). Each has a `name`, a `description` and `use_cases`. `query` narrows the list by those words.
+- A template sets a video's look: styling, transitions, effects, and often its voice and presenter. Use one only when the user asks for a template, names one ("our launch template"), or wants a video like an earlier one.
+- Choose by name, description and use cases. When several fit or none clearly does, show the user the names and let them choose.
+- Pass the chosen `template_id` to `create_video`. An id the workspace can't use is refused with `input_rejected` before anything starts.
+- To use a template in a video already started, ask for it in `edit_video` ("Use our launch template"): Velo's agent applies it.
 
 ## Changes, export and links
 
@@ -196,5 +205,6 @@ A failed call returns `code`, `message` and `retryable`, plus `retry_after_secon
 - Filling a sample prompt's [brackets] with guesses: a timestamp, component, emphasis or style the user didn't give.
 - Answering Velo's questions or approving a script on the user's behalf.
 - Summarizing Velo's script or questions: show them whole.
-- Inventing URLs, voices, avatars or previews.
+- Inventing URLs, voices, avatars, templates or previews.
+- Picking a template the user didn't ask for.
 - Calling `get_video_status` again on any status other than Working or Finishing.
