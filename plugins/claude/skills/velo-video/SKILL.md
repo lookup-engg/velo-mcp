@@ -137,18 +137,18 @@ A library is a shared collection in the workspace where exported videos are publ
 Assets is the workspace's shared library of images, video, audio and documents that members add once and use in any video. It is separate from the files added to one video with `upload_file`.
 
 - `list_assets` lists the files, newest first. `query` matches part of a file name and `kind` narrows to image, video, audio or document; pass `offset` to page through when `has_more` is true. Each file has its `asset_id`, name, who added it, when, and the videos using it (`used_in`). Call it when the user wants to see, find or choose files. Files the user picks go to `create_video` as `asset_ids`, at most 10.
-- `upload_asset` adds files to Assets. It has the same upload page flow as `upload_file`: with no `files` it returns an `upload_page_url` to give the user as a link, and `list_assets` confirms the files arrived once they say they're done.
+- `upload_asset` adds files to Assets. Call it with no `files` and give the user the returned `upload_page_url` as a link: they add the files in their browser and choose **Done uploading**. Once they say they're done, `list_assets` confirms the files arrived.
 - Removing a file happens in Velo: give the user the Assets page link (`assets_url`). No tool deletes one.
 
 ### Replacing a file and updating videos
 
-- `replace_asset` swaps a file for a newer version the user attached, keeping its id, who added it and when. Only the person who added the file or a workspace admin may replace it. Videos that already used the old file keep it, still count as using it, and show as outdated until they're updated.
-- `asset_videos` lists the videos using a file, outdated ones first. Each has its `video_id`, title and chat link, whether it is up to date, and `can_update`. When `can_update` is false, `why_not` says why (only the person who made a video can have it updated, and not while the agent is working on it). `outdated_not_yours_to_open` counts outdated videos in chats the user can't open; they are not listed.
+- `replace_asset` takes the file's `asset_id` (from `list_assets`). It swaps the file for a newer version, keeping its id, who added it and when. Without a file the reply gives `assets_url`: the user replaces the file there, in the file's menu under Replace…, and says when it's done. Only the person who added the file or a workspace admin may replace it. Videos that already used the old file keep it, still count as using it, and show as outdated until they're updated.
+- `asset_videos` lists the videos using a file, outdated ones first. Each has its `video_id`, title and chat link, whether it is up to date (an outdated one has `uses_old_file`, the name of the older file it still holds), and `can_update`. When `can_update` is false, `why_not` says why (only the person who made a video can have it updated, and not while the agent is working on it). `outdated_not_yours_to_open` counts outdated videos in chats the user can't open; they are not listed.
 - `update_videos_with_asset` starts an update in each chosen video's chat so it uses the latest version of the file. Each update is an agent turn and uses credits.
 
 When the user wants a file updated:
 
-1. Call `replace_asset` with the new file. If the reply says some videos use the old file, or the user asks to update the videos using a file, call `asset_videos`.
+1. Call `replace_asset` with the `asset_id` and give the user the `assets_url` from the reply to replace the file there. Once they say it's done, or when the user asks to update the videos using a file, call `asset_videos`.
 2. Show the outdated videos by title, each as a link to its chat, and ask which to update. Don't pick for the user, and don't start every outdated video unasked.
 3. Call `update_videos_with_asset` with only the `video_id`s they chose, at most 20 at a time. Say once that each update uses credits.
 4. Give the user the chat links from the reply. Updates run in the background, so don't wait on them. A video the agent is already working on, one already up to date, or one made by someone else is skipped with the reason: pass the reason on. If credits run out, that video and the rest are not started: see Credits.
