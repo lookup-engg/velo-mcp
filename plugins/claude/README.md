@@ -52,6 +52,7 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `list_files` | Confirms which uploaded files are waiting to go to Velo. |
 | `list_voices` | Lists the narration voices you can use. |
 | `list_avatars` | Lists the AI presenters you can use. |
+| `list_templates` | Lists the templates you can start a video from. |
 | `export_video` | Renders the current draft into the finished video. Free. |
 | `list_libraries` | Lists the workspace's libraries the user can see. |
 | `create_library` | Creates a public or private library in the workspace. |
