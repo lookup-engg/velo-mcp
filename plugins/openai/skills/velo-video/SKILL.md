@@ -111,10 +111,10 @@ Answers and selections come from the user. Choose for them only when they explic
 
 ## Templates
 
-- `list_templates` lists the templates the user can start a video from: Velo's own (`made_by: velo`), then the ones their team saved in the workspace (`made_by: workspace`, with `created_by`). Each has a `name`, a `description` and `use_cases`. `query` narrows the list by those words.
+- `list_templates` lists the templates the user can start a video from: Velo's curated ones first, then the workspace's own. Each has `template_id`, `name`, `description`, `categories` and `workspace_own` (true for one the workspace saved). A workspace template also has `made_by`, the name of the person who made it. `query` narrows the list by name, description and categories, ignoring case.
 - A template sets a video's look: styling, transitions, effects, and often its voice and presenter. Use one only when the user asks for a template, names one ("our launch template"), or wants a video like an earlier one.
-- Choose by name, description and use cases. When several fit or none clearly does, show the user the names and let them choose.
-- Pass the chosen `template_id` to `create_video`. An id the workspace can't use is refused with `input_rejected` before anything starts.
+- Choose by name, description and categories. When several fit or none clearly does, show the user the names and let them choose.
+- Pass the chosen `template_id` to `create_video`. An id the workspace can't use is refused with `not_found` before anything starts.
 - To use a template in a video already started, ask for it in `edit_video` ("Use our launch template"): Velo's agent applies it.
 
 ## Changes, export and links
