@@ -83,7 +83,7 @@ Present every question in plain chat text, whether it arrives in `message` or `p
 
 ### `pending_question`
 
-- Pass its `id` as `pending_question_id`, with the user's reply in `message` (as they gave it) or their choices in `answers`. Keys for `answers` come from `pending_question.answer_fields`; values are the chosen option IDs, the user's typed text, or null to skip an optional field. Partial answers are accepted.
+- Pass its `id` as `pending_question_id`, with the user's reply in `message` (as they gave it) or their choices in `answers`. Keys for `answers` come from `pending_question.answer_fields`; values are the chosen option IDs, the user's typed text, or null to skip an optional field. Partial answers are accepted. Any question answered through `answers` is written out by Velo itself, so a pick sent in `answers` isn't repeated in `message`: beside `answers` it carries only what they leave unsaid (a condition or a change), and stays empty for a plain pick.
 - Ask optional fields in text and mark them optional. The user may answer or skip them; don't skip them silently.
 - `free_text_ok: false` means a step only the Velo page can do, such as recording a take or choosing music. Send the user to `preview_url` and don't answer it with `edit_video`. Once they say it's done, check `get_video_status`.
 - A result with `submitted: false` means that question was already answered or replaced, so nothing was sent; the result carries the latest state. Don't apply the old reply to the new question, and don't resend it without a question ID.
@@ -105,7 +105,8 @@ Answers and selections come from the user. Choose for them only when they explic
 - `list_voices` and `list_avatars` list what the user can use, grouped as their own, shared in the workspace, then public. Show them in those groups, by name.
 - A `pending_question` that asks for a voice or avatar carries its own choices: answer from those. Use the catalogs when Velo asks in `message` without choices, or when the user wants to choose or change one.
 - `voices_url` opens Velo's voice library, where the user can listen before choosing. Opening it selects nothing.
-- Send the pick with `edit_video`: the user's words in `message`, the ID as `voice_id` or `avatar_id` (an avatar can take a `voice_id` too), and the `pending_question_id` when it answers a question.
+- Send the pick with `edit_video`. For a voice or avatar question, put it in `answers` (keys from `answer_fields`) with the `pending_question_id`. As with any question answered through `answers`, `message` holds only a condition the user added, or nothing, since Velo writes the answer out itself.
+- For a voice or avatar chosen from the catalogs instead, send the user's words in `message` and the ID as `voice_id` or `avatar_id` (an avatar can take a `voice_id` too).
 - Show only previews Velo supplies. Don't add stock or illustrative portraits.
 
 ## Changes, export and links
