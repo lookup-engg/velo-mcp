@@ -7,8 +7,9 @@ description: >
   website", or "a video presented by an avatar". It also applies when following a
   Velo video ("check on my Velo video", "is my video ready?"), when Velo asks the
   user something (the brief, which Assets to use, script approval, a voice or an
-  avatar), when changing a draft, when exporting or sharing a finished video, and
-  when browsing, adding, replacing or removing files in the workspace's Velo Assets.
+  avatar), when changing a draft, when exporting or sharing a finished video, when
+  browsing, adding, replacing or removing files in the workspace's Velo Assets, and
+  when creating a workspace library or adding a video to one or taking it out.
 ---
 
 # Making videos with Velo
@@ -62,7 +63,7 @@ The user can also work on the video in Velo itself. `since_you_looked` lists wha
 | --- | --- | --- |
 | Working | Velo's agent is on it. `message` is its latest progress line. | Call `get_video_status`. |
 | Needs your answer | Velo is waiting on the user: a question in `message`, a `pending_question`, or both. | Show it in full (see "When Velo asks"). |
-| Needs your action | Velo's browser needs the user, for example to sign in to a site (`pending_action`). | Send the user to `preview_url`: they choose Take control, sign in if needed, then Resume agent. Never ask for their credentials in chat. Once they're back, check the status again; sending a message doesn't resume that browser. |
+| Needs your action | Velo's browser needs the user, for example to sign in to a site (`pending_action`). | Send the user to `preview_url`: they choose Take control, sign in if needed, then Resume agent. That sign-in happens in Velo's browser, never in this chat. Once they're back, check the status again; sending a message doesn't resume that browser. |
 | Draft ready | A draft to watch at `preview_url`. `message` is Velo's reply and may ask something. | Show `message` and the link. Send answers or changes with `edit_video`. Export only when the user asks. |
 | Finishing | The final video is rendering. `render_percent` says how far along. | Call `get_video_status`. |
 | Done | The video is finished. `video_url` is its share page, present when sharing is on. | Give the user the links. |
@@ -131,6 +132,16 @@ Assets is the workspace's shared library of files: images, video, audio, and doc
 - `preview_url` is the video's Velo chat, where the user watches the draft, answers and edits.
 - `video_url` is the finished video's share page, not a file download.
 - `list_videos` lists the user's videos, most recently active first, with each one's status and link. `status` narrows it to `draft` or `rendered`; pass `next_cursor` back as `cursor` for the next page. Use it to find a video the user mentions.
+
+## Libraries
+
+A library is a shared collection in the workspace where exported videos are published for members to watch. Every workspace has a default one, General.
+
+- `list_libraries` lists the libraries the user can see, with `library_id`, `name`, `visibility`, `is_default` and `video_count`. Call it when the user names a library; a video's own library is in its status and `list_videos` row as `library`.
+- `create_library` makes a new library with the user's `name`, `public` (every member sees it, the default) or `private` (the creator, admins and members they add in Velo). Call it only when the user asks for a new library: names can repeat, so when they say "the X library", find it with `list_libraries` first. The reply's `library_id` goes straight to `add_to_library`.
+- `add_to_library` puts one exported video in a library by `chat_id`; omit `library_id` for General. Only an exported video with its share link on can go in, even while it is being edited again: one never exported is refused, and whether to export it is the user's decision (say so, don't export); one whose share link was turned off is turned back on in Velo. A video is in at most one library: `added: false` means it was already there; one held by another library is refused, and the reply names that library when the user can see it. To move a video, remove it first, then add it, on the user's say-so.
+- `remove_from_library` takes a video out of its library by `chat_id`, on the user's request in this conversation. The video and its share link stay in Velo; only the library listing goes. `removed: false` means it wasn't in one.
+- Confirm the library by the name in the reply, never by id.
 
 ## Prompting Velo
 
