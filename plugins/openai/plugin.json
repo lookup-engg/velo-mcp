@@ -84,6 +84,18 @@
               "prompt": "Make a 10-second intro video about www.usevelo.ai that uses our logo from Velo Assets.",
               "tools_triggered": "list_assets, create_video, get_video_status",
               "expected_behavior": "Finds the logo in Assets (asking which one if several match), starts a 10-second video with that file chosen so Velo doesn't ask which assets to use, follows it, then shows Velo's questions in full without answering for the user."
+            },
+            {
+              "description": "Add a file to the workspace's Assets",
+              "prompt": "Add the attached logo to Velo Assets so we can reuse it.",
+              "tools_triggered": "upload_asset",
+              "expected_behavior": "Passes the attached file to upload_asset. When Velo adds it, confirms the file by name and shows no IDs or raw URLs. When Velo refuses it, gives the upload link with a short label and waits for the user to say they're done before calling list_assets."
+            },
+            {
+              "description": "Replace a file in the workspace's Assets",
+              "prompt": "Replace our logo in Velo Assets with the attached file.",
+              "tools_triggered": "list_assets, replace_asset",
+              "expected_behavior": "Finds the logo in Assets (asking which one if several match) and passes it with the attached file to replace_asset. Confirms the same file was replaced, that Velo reads the new one again, and that videos already using the old file keep it. Shows no IDs or raw URLs."
             }
           ],
           "negative": [
