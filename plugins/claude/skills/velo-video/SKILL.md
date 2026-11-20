@@ -9,7 +9,8 @@ description: >
   user something (the brief, script approval, a voice or an avatar), when changing a
   draft, when exporting or sharing a finished video, and when creating or renaming
   a workspace library, changing who can see it, turning its public link on or off,
-  or adding a video to one or taking it out.
+  or adding a video to one or taking it out. It also applies to the workspace's Assets
+  (browsing, adding or replacing a file) and to updating the videos that use a file.
 ---
 
 # Making videos with Velo
@@ -131,6 +132,27 @@ A library is a shared collection in the workspace where exported videos are publ
 - `set_library_share_link` turns a library's public link `on` (the same link as before), `off`, or `regenerate` (a new link; the old one stops working for good). Turning it on makes a public link: anyone who has it, outside the workspace too, can watch the library's videos, so confirm with the user before turning it on or replacing it. `share_url` is in the reply while the link is on. Only the library's maker or a workspace admin may.
 - Confirm the library by the name in the reply, never by id.
 
+## Assets
+
+Assets is the workspace's shared library of images, video, audio and documents that members add once and use in any video. It is separate from the files added to one video with `upload_file`.
+
+- `list_assets` lists the files, newest first. `query` matches part of a file name and `kind` narrows to image, video, audio or document; pass `offset` to page through when `has_more` is true. Each file has its `asset_id`, name, who added it, when, and the videos using it (`used_in`). Call it when the user wants to see, find or choose files. Files the user picks go to `create_video` as `asset_ids`, at most 10.
+- `upload_asset` adds files to Assets. It has the same upload page flow as `upload_file`: with no `files` it returns an `upload_page_url` to give the user as a link, and `list_assets` confirms the files arrived once they say they're done.
+- Removing a file happens in Velo: give the user the Assets page link (`assets_url`). No tool deletes one.
+
+### Replacing a file and updating videos
+
+- `replace_asset` swaps a file for a newer version the user attached, keeping its id, who added it and when. Only the person who added the file or a workspace admin may replace it. Videos that already used the old file keep it, still count as using it, and show as outdated until they're updated.
+- `asset_videos` lists the videos using a file, outdated ones first. Each has its `video_id`, title and chat link, whether it is up to date, and `can_update`. When `can_update` is false, `why_not` says why (only the person who made a video can have it updated, and not while the agent is working on it). `outdated_not_yours_to_open` counts outdated videos in chats the user can't open; they are not listed.
+- `update_videos_with_asset` starts an update in each chosen video's chat so it uses the latest version of the file. Each update is an agent turn and uses credits.
+
+When the user wants a file updated:
+
+1. Call `replace_asset` with the new file. If the reply says some videos use the old file, or the user asks to update the videos using a file, call `asset_videos`.
+2. Show the outdated videos by title, each as a link to its chat, and ask which to update. Don't pick for the user, and don't start every outdated video unasked.
+3. Call `update_videos_with_asset` with only the `video_id`s they chose, at most 20 at a time. Say once that each update uses credits.
+4. Give the user the chat links from the reply. Updates run in the background, so don't wait on them. A video the agent is already working on, one already up to date, or one made by someone else is skipped with the reason: pass the reason on. If credits run out, that video and the rest are not started: see Credits.
+
 ## Prompting Velo
 
 Velo's video creation is intent and outcome driven: it works best from a simple explanation of what the finished video should achieve. Lead every `message` to Velo with that outcome in plain words, then add only what the user said, attached or connected. A detail the user didn't give stays out, or Velo is told to ask about it.
@@ -203,3 +225,4 @@ A failed call returns `code`, `message` and `retryable`, plus `retry_after_secon
 - Inventing URLs, voices, avatars or previews.
 - Calling `get_video_status` again on any status other than Working or Finishing.
 - Turning a library's public link on, or replacing it, before the user confirms.
+- Starting an update on a video the user didn't pick, or on every outdated video at once.

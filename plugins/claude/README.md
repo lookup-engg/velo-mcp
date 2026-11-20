@@ -60,10 +60,15 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `rename_library` | Renames a library. General's name can't change. |
 | `set_library_visibility` | Makes a library public or private. General stays public. |
 | `set_library_share_link` | Turns a library's public link on or off, or replaces it. |
+| `list_assets` | Lists the files in the workspace's Assets. |
+| `upload_asset` | Adds files to Assets through an upload link. |
+| `replace_asset` | Replaces a file in Assets with a newer version. Videos using the old file show as outdated. |
+| `asset_videos` | Lists the videos using a file and which are outdated. |
+| `update_videos_with_asset` | Updates the videos you choose to use the latest version of a file. Spends credits. |
 
 ## Credits
 
-Making and changing videos (`create_video`, `edit_video`) spends credits from your Velo workspace. Exporting is free, though automatic repairs after a render error may use credits. Workspace owners add credits in Velo's billing settings.
+Making and changing videos (`create_video`, `edit_video`, `update_videos_with_asset`) spends credits from your Velo workspace. Exporting is free, though automatic repairs after a render error may use credits. Workspace owners add credits in Velo's billing settings.
 
 ## Data handling
 
