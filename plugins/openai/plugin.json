@@ -96,6 +96,30 @@
               "prompt": "Replace our logo in Velo Assets with the attached file.",
               "tools_triggered": "list_assets, replace_asset",
               "expected_behavior": "Finds the logo in Assets (asking which one if several match) and passes it with the attached file to replace_asset. Confirms the same file was replaced, that Velo reads the new one again, and that videos already using the old file keep it. Shows no IDs or raw URLs."
+            },
+            {
+              "description": "List workspace libraries",
+              "prompt": "What libraries do I have in Velo?",
+              "tools_triggered": "list_libraries",
+              "expected_behavior": "Lists every library the user can see, by name, and says whether each is public or private. Names General as the workspace default. Does not mention library ids."
+            },
+            {
+              "description": "Create a library the user asked for",
+              "prompt": "Create a private Velo library called Launch Q3.",
+              "tools_triggered": "list_libraries, create_library",
+              "expected_behavior": "Looks up libraries by name first, because names can repeat, then creates a private library named Launch Q3 only because the user asked for a new one. Confirms it by name, not by id."
+            },
+            {
+              "description": "Add an exported video to a named library",
+              "prompt": "Add my latest Velo video to the Launch Q3 library.",
+              "tools_triggered": "list_videos, list_libraries, add_to_library",
+              "expected_behavior": "Finds the latest video and the Launch Q3 library by name, then adds the video to that library. Adds it only when the video is exported and its share link is on. If it was never exported, says so and does not export. Adding it leaves any other libraries it is already in. Confirms the library by name, not by id."
+            },
+            {
+              "description": "Remove a video from a library",
+              "prompt": "Take my latest Velo video out of the Launch Q3 library.",
+              "tools_triggered": "list_videos, list_libraries, remove_from_library",
+              "expected_behavior": "Finds the latest video and the Launch Q3 library, then removes the video from that library only. The video, its share link and its other libraries stay. Does not try to remove it from General. Confirms the library by name, not by id."
             }
           ],
           "negative": [

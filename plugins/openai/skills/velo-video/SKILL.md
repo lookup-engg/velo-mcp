@@ -9,7 +9,8 @@ description: >
   user something (the brief, which Assets to use, script approval, a voice or an
   avatar), when changing a draft, when exporting or sharing a finished video, when
   browsing, adding, replacing or removing files in the workspace's Velo Assets, and
-  when creating a workspace library or adding a video to one or taking it out.
+  when creating or renaming a workspace library, changing who can see it, turning
+  its public link on or off, or adding a video to one or taking it out.
 ---
 
 # Making videos with Velo
@@ -135,12 +136,15 @@ Assets is the workspace's shared library of files: images, video, audio, and doc
 
 ## Libraries
 
-A library is a shared collection in the workspace where exported videos are published for members to watch. Every workspace has a default one, General.
+A library is a shared collection in the workspace where exported videos are published for members to watch. Every workspace has a default one, General, which already holds every video on its own.
 
-- `list_libraries` lists the libraries the user can see, with `library_id`, `name`, `visibility`, `is_default` and `video_count`. Call it when the user names a library; a video's own library is in its status and `list_videos` row as `library`.
+- `list_libraries` lists the libraries the user can see, with `library_id`, `name`, `visibility`, `is_default` and `video_count`. Call it when the user names a library. The libraries a video was added to, besides General, are on its status and in its `list_videos` row as `libraries`.
 - `create_library` makes a new library with the user's `name`, `public` (every member sees it, the default) or `private` (the creator, admins and members they add in Velo). Call it only when the user asks for a new library: names can repeat, so when they say "the X library", find it with `list_libraries` first. The reply's `library_id` goes straight to `add_to_library`.
-- `add_to_library` puts one exported video in a library by `chat_id`; omit `library_id` for General. Only an exported video with its share link on can go in, even while it is being edited again: one never exported is refused, and whether to export it is the user's decision (say so, don't export); one whose share link was turned off is turned back on in Velo. A video is in at most one library: `added: false` means it was already there; one held by another library is refused, and the reply names that library when the user can see it. To move a video, remove it first, then add it, on the user's say-so.
-- `remove_from_library` takes a video out of its library by `chat_id`, on the user's request in this conversation. The video and its share link stay in Velo; only the library listing goes. `removed: false` means it wasn't in one.
+- `add_to_library` puts one exported video in a library by `chat_id`; omit `library_id` for General, which already holds every video, so that call reports `added: false`. Only an exported video with its share link on can go in, even while it is being edited again: one never exported is refused, and whether to export it is the user's decision (say so, don't export); one whose share link was turned off is turned back on in Velo. A video can be in any number of libraries, and adding it to one leaves the others. `added: false` also means it was already in that library. The reply names the library.
+- `remove_from_library` takes a video out of one library by `chat_id`, on the user's request in this conversation. Pass `library_id` when it is in more than one. When it is in several and none is named, the reply lists them so the user can choose. The video, its share link and its other libraries stay. `removed: false` means it wasn't in a library besides General, and General itself can't be left.
+- `rename_library` renames a library to the `name` the user gave, on their request. Only its maker or a workspace admin may, and General's name can't change. Take `library_id` from `list_libraries`.
+- `set_library_visibility` makes a library `public` (every workspace member sees it) or `private` (its maker, admins and the members added to it in Velo), on the user's request. Only its maker or a workspace admin may, and General stays public.
+- `set_library_share_link` turns a library's public link `on` (the same link as before), `off`, or `regenerate` (a new link; the old one stops working for good). Turning it on makes a public link: anyone who has it, outside the workspace too, can watch the library's videos, so confirm with the user before turning it on or replacing it. `share_url` is in the reply while the link is on. Only the library's maker or a workspace admin may.
 - Confirm the library by the name in the reply, never by id.
 
 ## Prompting Velo
@@ -215,3 +219,4 @@ A failed call returns `code`, `message` and `retryable`, plus `retry_after_secon
 - Inventing URLs, voices, avatars, assets or previews.
 - Saying a file was deleted from Assets: no tool deletes one.
 - Calling `get_video_status` again on any status other than Working or Finishing.
+- Turning a library's public link on, or replacing it, before the user confirms.
