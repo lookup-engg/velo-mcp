@@ -53,11 +53,17 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `list_voices` | Lists the narration voices you can use. |
 | `list_avatars` | Lists the AI presenters you can use. |
 | `list_templates` | Lists the templates you can start a video from. |
+| `list_assets` | Lists and searches the files in your workspace's Assets. |
+| `upload_asset` | Adds files to your workspace's Assets through an upload link, to reuse in any video. |
+| `replace_asset` | Replaces a file in your workspace's Assets with a newer version. You choose Replace… in that file's menu. |
 | `export_video` | Renders the current draft into the finished video. Free. |
 | `list_libraries` | Lists the workspace's libraries the user can see. |
 | `create_library` | Creates a public or private library in the workspace. |
-| `add_to_library` | Puts an exported video in a library (General by default). |
-| `remove_from_library` | Takes a video out of its library. |
+| `add_to_library` | Puts an exported video in a library. General already holds every video. |
+| `remove_from_library` | Takes a video out of one library. The video and its share link stay. |
+| `rename_library` | Renames a library. General's name can't change. |
+| `set_library_visibility` | Makes a library public or private. General stays public. |
+| `set_library_share_link` | Turns a library's public link on or off, or replaces it. |
 
 ## Credits
 
