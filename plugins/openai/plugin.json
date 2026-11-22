@@ -74,6 +74,12 @@
               "expected_behavior": "List the available face clones in the workspace"
             },
             {
+              "description": "List video templates",
+              "prompt": "Which video templates can I use in Velo?",
+              "tools_triggered": "list_templates",
+              "expected_behavior": "Lists every template by name, Velo's curated ones then the workspace's own."
+            },
+            {
               "description": "Browse the workspace's Assets",
               "prompt": "Which images do we have in Velo Assets?",
               "tools_triggered": "list_assets",
