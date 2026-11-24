@@ -126,6 +126,18 @@
               "prompt": "Take my latest Velo video out of the Launch Q3 library.",
               "tools_triggered": "list_videos, list_libraries, remove_from_library",
               "expected_behavior": "Finds the latest video and the Launch Q3 library, then removes the video from that library only. The video, its share link and its other libraries stay. Does not try to remove it from General. Confirms the library by name, not by id."
+            },
+            {
+              "description": "List the user's workspaces",
+              "prompt": "Which Velo workspace am I in?",
+              "tools_triggered": "list_workspaces",
+              "expected_behavior": "Lists the user's Velo workspaces by name with their role, says which one is in use now, and notes any where the Velo agent isn't on. Does not mention workspace ids."
+            },
+            {
+              "description": "Switch to another workspace the user named",
+              "prompt": "Switch Velo to my Marketing workspace.",
+              "tools_triggered": "list_workspaces, switch_workspace",
+              "expected_behavior": "Finds the Marketing workspace with list_workspaces, then switches with its workspace_id. Confirms by name that work now happens in Marketing and that videos from the previous workspace stay there. Does not mention ids."
             }
           ],
           "negative": [
