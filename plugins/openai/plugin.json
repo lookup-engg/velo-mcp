@@ -126,6 +126,12 @@
               "prompt": "Take my latest Velo video out of the Launch Q3 library.",
               "tools_triggered": "list_videos, list_libraries, remove_from_library",
               "expected_behavior": "Finds the latest video and the Launch Q3 library, then removes the video from that library only. The video, its share link and its other libraries stay. Does not try to remove it from General. Confirms the library by name, not by id."
+            },
+            {
+              "description": "Put a library on the Velo Public Library",
+              "prompt": "Put the Launch Q3 library on our Velo Public Library.",
+              "tools_triggered": "list_libraries, set_velo_public_library",
+              "expected_behavior": "Finds the Launch Q3 library by name and confirms with the user before putting it on, since its videos become visible to the page's outside viewers. Then calls set_velo_public_library with published true. If the library is private or the user isn't a workspace admin or owner, relays the refusal. Says when the page isn't live yet. Confirms the library by name, not by id."
             }
           ],
           "negative": [
