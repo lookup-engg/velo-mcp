@@ -9,8 +9,7 @@ description: >
   user something (the brief, script approval, a voice or an avatar), when changing a
   draft, when exporting or sharing a finished video, and when creating a workspace
   library or adding a video to one or taking it out, and when the user wants a word
-  spelled or pronounced the same way in every video ("how to say", "pronunciation",
-  "glossary").
+  spelled or pronounced the same way in every video ("how to say", "pronunciation").
 ---
 
 # Making videos with Velo
@@ -129,14 +128,14 @@ A library is a shared collection in the workspace where exported videos are publ
 - `remove_from_library` takes a video out of its library by `chat_id`, on the user's request in this conversation. The video and its share link stay in Velo; only the library listing goes. `removed: false` means it wasn't in one.
 - Confirm the library by the name in the reply, never by id.
 
-## Glossary and pronunciation
+## Pronunciations
 
-The workspace glossary lists the names, places, products and acronyms the workspace's videos use: how each is spelled on screen and how every voice says it. Every video follows it.
+The workspace's pronunciations list the names, places, products and acronyms the workspace's videos use: how each is spelled on screen and how every voice says it. Every video follows them.
 
-- `get_glossary` reads it: each term's spelling, `sounds_like`, `ipa`, `letter_by_letter` and `note`. `active` is false on a free plan, where the terms are kept but not used; `can_add` says whether this user may add terms.
-- When the user wants a word spelled or said the same way in their videos ("it's SAH-nus, not SAY-nus", "always write it as PLASS"), fix the current video with `edit_video` in the user's words, then suggest adding the word to the glossary so every video follows it. One suggestion per word.
-- `add_glossary_term` adds it, only after the user asks or agrees: the `term` as it is spelled, `sounds_like` in the user's words (a respelling, a comparison or stress notes), `letter_by_letter` for acronyms said that way, an optional `category` and `note`. It needs a workspace admin on a paid plan; a refusal says what the user can do instead, so pass that on.
-- Terms are changed and removed in Velo, at `glossary_url`. A word already in the glossary with a different sound is changed there.
+- `get_pronunciations` reads them: each term's spelling, `sounds_like`, `ipa`, `letter_by_letter` and `note`. `active` is false on a free plan, where the terms are kept but not used; `can_add` says whether this user may add terms.
+- When the user wants a word spelled or said the same way in their videos ("it's SAH-nus, not SAY-nus", "always write it as PLASS"), fix the current video with `edit_video` in the user's words, then suggest adding the word to the workspace's pronunciations so every video follows it. One suggestion per word.
+- `add_pronunciation` adds it, only after the user asks or agrees: the `term` as it is spelled, `sounds_like` in the user's words (a respelling, a comparison or stress notes), `letter_by_letter` for acronyms said that way, an optional `category` and `note`. It needs a workspace admin on a paid plan; a refusal says what the user can do instead, so pass that on.
+- Terms are changed and removed in Velo, at `pronunciations_url`. A word that is already there with a different sound is changed there.
 
 ## Prompting Velo
 
