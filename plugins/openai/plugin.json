@@ -137,7 +137,7 @@
               "description": "Switch to another workspace the user named",
               "prompt": "Switch Velo to my Marketing workspace.",
               "tools_triggered": "list_workspaces, switch_workspace",
-              "expected_behavior": "Finds the Marketing workspace with list_workspaces, then switches with its workspace_id. Confirms by name that work now happens in Marketing and that videos from the previous workspace stay there. Does not mention ids."
+              "expected_behavior": "Finds the Marketing workspace with list_workspaces, then switches with its workspace_id. Confirms by name that new work now happens in Marketing, and that videos made before keep working where they are. Does not mention ids."
             }
           ],
           "negative": [

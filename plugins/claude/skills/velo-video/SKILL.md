@@ -111,7 +111,7 @@ Answers and selections come from the user. Choose for them only when they explic
 A Velo user can belong to several workspaces. The connection works in one of them at a time: its videos, voices, libraries, Assets, brand kit and credits are that workspace's.
 
 - `list_workspaces` says who the user is in Velo (`you`: name and email) and lists their workspaces with `workspace_id`, `name`, `role`, `current` (the one in use now) and `usable` (the Velo agent is on there). Call it when they ask which workspace they're in, or name another one.
-- `switch_workspace` moves the connection to another of their workspaces, by `workspace_id` from `list_workspaces`, on their request. When you only inferred it from a request ("make this in Acme"), ask first: a name in a request is often a customer, not a workspace. Everything after the switch happens in the new workspace. Videos made in the previous one stay there and answer `not_found` until they switch back. A workspace that isn't theirs, or has the agent off, is refused and nothing moves.
+- `switch_workspace` moves the connection to another of their workspaces, by `workspace_id` from `list_workspaces`, on their request. When you only inferred it from a request ("make this in Acme"), ask first: a name in a request is often a customer, not a workspace. New videos, lists, libraries and Assets then come from the new workspace. A video made before keeps working in its own workspace by its `chat_id` (status, changes, export, sharing), so earlier chats carry on as they were. A workspace that isn't theirs, or has the agent off, is refused and nothing moves.
 - Confirm the switch by the workspace's name, never by id.
 
 ## Voices and avatars
