@@ -10,7 +10,8 @@ description: >
   avatar), when changing a draft, when exporting or sharing a finished video, when
   browsing, adding, replacing or removing files in the workspace's Velo Assets, and
   when creating or renaming a workspace library, changing who can see it, turning
-  its public link on or off, or adding a video to one or taking it out.
+  its public link on or off, or adding a video to one or taking it out, and when
+  asking which Velo workspace is in use or switching to another of their workspaces.
 ---
 
 # Making videos with Velo
@@ -104,6 +105,14 @@ The script arrives as a `pending_question` of kind `script-review`, with every s
 ### Answering for the user
 
 Answers and selections come from the user. Choose for them only when they explicitly ask, and then say so in `message` ("the user asked Velo to choose the voice").
+
+## Workspaces
+
+A Velo user can belong to several workspaces. The connection works in one of them at a time: its videos, voices, libraries, Assets, brand kit and credits are that workspace's.
+
+- `list_workspaces` says who the user is in Velo (`you`: name and email) and lists their workspaces with `workspace_id`, `name`, `role`, `current` (the one in use now) and `usable` (the Velo agent is on there). Call it when they ask which workspace they're in, or name another one.
+- `switch_workspace` moves the connection to another of their workspaces, by `workspace_id` from `list_workspaces`, on their request. When you only inferred it from a request ("make this in Acme"), ask first: a name in a request is often a customer, not a workspace. New videos, lists, libraries and Assets then come from the new workspace. A video made before keeps working in its own workspace by its `chat_id` (status, changes, export, sharing), so earlier chats carry on as they were. A workspace that isn't theirs, or has the agent off, is refused and nothing moves.
+- Confirm the switch by the workspace's name, never by id.
 
 ## Voices and avatars
 

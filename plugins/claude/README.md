@@ -48,6 +48,8 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `edit_video` | Sends your reply, an answer to Velo's question, script approval or a change request to a video. Spends credits. |
 | `get_video_status` | Gets a video's status, Velo's latest message and any question waiting for you. |
 | `list_videos` | Lists your videos in the workspace, most recent first. |
+| `list_workspaces` | Lists your Velo workspaces and the one this connection works in. |
+| `switch_workspace` | Moves this connection to another of your workspaces. |
 | `upload_file` | Adds files (a document, a recording, images, a logo) to a video through an upload link. |
 | `list_files` | Confirms which uploaded files are waiting to go to Velo. |
 | `list_voices` | Lists the narration voices you can use. |
