@@ -10,7 +10,8 @@ description: >
   avatar), when changing a draft, when exporting or sharing a finished video, when
   browsing, adding, replacing or removing files in the workspace's Velo Assets, and
   when creating or renaming a workspace library, changing who can see it, turning
-  its public link on or off, or adding a video to one or taking it out.
+  its public link on or off, or adding a video to one or taking it out, and when
+  asking which Velo workspace is in use or switching to another of their workspaces.
 ---
 
 # Making videos with Velo
@@ -50,6 +51,7 @@ The role here: write Velo a short brief that says what the video should achieve,
 | `generate_with_avatar` | A video presented by an AI avatar or user's clone. | Nothing |
 
 - Pass `voice_id` or `avatar_id` only for one the user already chose (see Voices and avatars). Either one needs a `message` too.
+- Pass `template_id` only when the user asked for a template (see Templates).
 - Pass `asset_ids` only for files the user chose from Assets (see Assets). It needs a `message` too.
 - If the user wants to review the script before Velo builds the video, say so in `message`, even for a video without narration.
 - Starting a video never approves a later script.
@@ -87,7 +89,7 @@ Present every question in plain chat text, whether it arrives in `message` or `p
 
 ### `pending_question`
 
-- Pass its `id` as `pending_question_id`, with the user's reply in `message` (as they gave it) or their choices in `answers`. Keys for `answers` come from `pending_question.answer_fields`; values are the chosen option IDs, the user's typed text, or null to skip an optional field. Partial answers are accepted.
+- Pass its `id` as `pending_question_id`, with the user's reply in `message` (as they gave it) or their choices in `answers`. Keys for `answers` come from `pending_question.answer_fields`; values are the chosen option IDs, the user's typed text, or null to skip an optional field. Partial answers are accepted. Any question answered through `answers` is written out by Velo itself, so a pick sent in `answers` isn't repeated in `message`: beside `answers` it carries only what they leave unsaid (a condition or a change), and stays empty for a plain pick.
 - Ask optional fields in text and mark them optional. The user may answer or skip them; don't skip them silently.
 - `free_text_ok: false` means a step only the Velo page can do, such as recording a take or choosing music. Send the user to `preview_url` and don't answer it with `edit_video`. Once they say it's done, check `get_video_status`.
 - A result with `submitted: false` means that question was already answered or replaced, so nothing was sent; the result carries the latest state. Don't apply the old reply to the new question, and don't resend it without a question ID.
@@ -104,13 +106,30 @@ The script arrives as a `pending_question` of kind `script-review`, with every s
 
 Answers and selections come from the user. Choose for them only when they explicitly ask, and then say so in `message` ("the user asked Velo to choose the voice").
 
+## Workspaces
+
+A Velo user can belong to several workspaces. The connection works in one of them at a time: its videos, voices, libraries, Assets, brand kit and credits are that workspace's.
+
+- `list_workspaces` says who the user is in Velo (`you`: name and email) and lists their workspaces with `workspace_id`, `name`, `role`, `current` (the one in use now) and `usable` (the Velo agent is on there). Call it when they ask which workspace they're in, or name another one.
+- `switch_workspace` moves the connection to another of their workspaces, by `workspace_id` from `list_workspaces`, on their request. When you only inferred it from a request ("make this in Acme"), ask first: a name in a request is often a customer, not a workspace. New videos, lists, libraries and Assets then come from the new workspace. A video made before keeps working in its own workspace by its `chat_id` (status, changes, export, sharing), so earlier chats carry on as they were. A workspace that isn't theirs, or has the agent off, is refused and nothing moves.
+- Confirm the switch by the workspace's name, never by id.
+
 ## Voices and avatars
 
 - `list_voices` and `list_avatars` list what the user can use, grouped as their own, shared in the workspace, then public. Show them in those groups, by name.
 - A `pending_question` that asks for a voice or avatar carries its own choices: answer from those. Use the catalogs when Velo asks in `message` without choices, or when the user wants to choose or change one.
 - `voices_url` opens Velo's voice library, where the user can listen before choosing. Opening it selects nothing.
-- Send the pick with `edit_video`: the user's words in `message`, the ID as `voice_id` or `avatar_id` (an avatar can take a `voice_id` too), and the `pending_question_id` when it answers a question.
+- Send the pick with `edit_video`. For a voice or avatar question, put it in `answers` (keys from `answer_fields`) with the `pending_question_id`. As with any question answered through `answers`, `message` holds only a condition the user added, or nothing, since Velo writes the answer out itself.
+- For a voice or avatar chosen from the catalogs instead, send the user's words in `message` and the ID as `voice_id` or `avatar_id` (an avatar can take a `voice_id` too).
 - Show only previews Velo supplies. Don't add stock or illustrative portraits.
+
+## Templates
+
+- `list_templates` lists the templates the user can start a video from: Velo's curated ones first, then the workspace's own. Each has `template_id`, `name`, `description`, `categories` and `workspace_own` (true for one the workspace saved). A workspace template also has `made_by`, the name of the person who made it. `query` narrows the list by name, description and categories, ignoring case.
+- A template sets a video's look: styling, transitions, effects, and often its voice and presenter. Use one only when the user asks for a template, names one ("our launch template"), or wants a video like an earlier one.
+- Choose by name, description and categories. When several fit or none clearly does, show the user the names and let them choose.
+- Pass the chosen `template_id` to `create_video`. An id the workspace can't use is refused with `not_found` before anything starts.
+- To use a template in a video already started, ask for it in `edit_video` ("Use our launch template"): Velo's agent applies it.
 
 ## Assets
 
@@ -122,10 +141,10 @@ Assets is the workspace's shared library of files: images, video, audio, and doc
 - **Assets or one video:** a file in Assets is for the whole workspace and can go in any video. `upload_file` adds a file to one video only. Use `upload_asset` only when the user wants the file in Assets.
 - **Use Assets in a new video:** pass the files the user chose as `asset_ids` in `create_video`, at most 10, with a `message`. Velo then doesn't ask which assets to use. When the user names a file loosely ("our logo"), find it with `list_assets`, and ask which one when several match.
 - **The asset question:** without `asset_ids`, a new video in a workspace with more than 3 files in Assets asks which files to use. With 3 or fewer, Velo uses the ones that fit without asking and says which it used. It arrives as a `pending_question` of kind `asset-picker`, with Velo's suggestions in `options`, best first, and `assets_url` beside it. List every option by name, with its label, and say the user can pick up to 10, name others from Assets, or use none. They can browse with `list_assets` or on the Assets page. Send the picks with `edit_video`: the `pending_question_id` and `answers={"assets": [...]}` with their IDs, from the options or from `list_assets`. `[]` means use none.
-- **Replace a file:** when the user wants a newer version of a file in Assets, call `replace_asset` with its `asset_id` from `list_assets` and no `files`. Give the user the returned `assets_url` as a link and say they choose **Replace…** in that file's menu and tell you when it's done. The file keeps its place, who added it and when; Velo reads the new one again, and videos that already used the old file keep it, stay listed as using it and show as outdated until they're updated. Only the person who added it or a workspace admin can replace it.
+- **Replace a file:** when the user wants a newer version of a file in Assets, call `replace_asset` with its `asset_id` from `list_assets` and no `files`. Give the user the returned `assets_url` as a link and say they choose **Replace…** in that file's menu and tell you when it's done. The file keeps its place, who added it and when; Velo reads the new one again, and videos that already used the old file keep it, stay listed as using it and show as outdated until they're updated. Only a workspace admin or owner can replace a file, even one the user added themselves.
 - **Videos using a file:** `asset_videos` takes the file's `asset_id` and lists the videos that use it, outdated ones first. Each has its title, a chat link (`chat_url`), `up_to_date`, and, when outdated, `uses_old_file` (the name of the older file it still holds) and `can_update`. When `can_update` is false, `why_not` says why: only the person who made a video can have it updated, and not while the agent is working on it. `outdated_not_yours_to_open` counts outdated videos in chats the user can't open; they aren't listed. Show each by title as a link to its chat.
 - **Update videos after a replace:** once the file is replaced (or when the user asks to update the videos using a file), call `asset_videos`, show the outdated ones and ask which to update. Never pick for the user, and never start every outdated video unasked. Then call `update_videos_with_asset` with the `asset_id` and only the `video_id`s they chose, at most 20 at a time, and say once that each update is an agent turn that uses credits. Updates run in the background: give the user the `chat_url` links from the reply instead of waiting. A video the agent is already working on, one already up to date, or one made by someone else is skipped with the reason: pass it on. If credits run out, that video and the rest aren't started: see Credits.
-- **Remove a file:** no tool deletes from Assets. Give the user `assets_url` as a link and say they remove the file there. Never say a file was deleted.
+- **Remove a file:** no tool deletes from Assets. Give the user `assets_url` as a link and say a workspace admin or owner can remove the file there. Never say a file was deleted.
 
 ## Changes, export and links
 
@@ -140,13 +159,14 @@ Assets is the workspace's shared library of files: images, video, audio, and doc
 
 A library is a shared collection in the workspace where exported videos are published for members to watch. Every workspace has a default one, General, which already holds every video on its own.
 
-- `list_libraries` lists the libraries the user can see, with `library_id`, `name`, `visibility`, `is_default` and `video_count`. Call it when the user names a library. The libraries a video was added to, besides General, are on its status and in its `list_videos` row as `libraries`.
+- `list_libraries` lists the libraries the user can see, with `library_id`, `name`, `visibility`, `is_default`, `published` (whether it is on the Velo Public Library) and `video_count`. For a workspace admin or owner, `public_library` says whether that page is on and gives its `url`. Call it when the user names a library. The libraries a video was added to, besides General, are on its status and in its `list_videos` row as `libraries`.
 - `create_library` makes a new library with the user's `name`, `public` (every member sees it, the default) or `private` (the creator, admins and members they add in Velo). Call it only when the user asks for a new library: names can repeat, so when they say "the X library", find it with `list_libraries` first. The reply's `library_id` goes straight to `add_to_library`.
 - `add_to_library` puts one exported video in a library by `chat_id`; omit `library_id` for General, which already holds every video, so that call reports `added: false`. Only an exported video with its share link on can go in, even while it is being edited again: one never exported is refused, and whether to export it is the user's decision (say so, don't export); one whose share link was turned off is turned back on in Velo. A video can be in any number of libraries, and adding it to one leaves the others. `added: false` also means it was already in that library. The reply names the library.
 - `remove_from_library` takes a video out of one library by `chat_id`, on the user's request in this conversation. Pass `library_id` when it is in more than one. When it is in several and none is named, the reply lists them so the user can choose. The video, its share link and its other libraries stay. `removed: false` means it wasn't in a library besides General, and General itself can't be left.
 - `rename_library` renames a library to the `name` the user gave, on their request. Only its maker or a workspace admin may, and General's name can't change. Take `library_id` from `list_libraries`.
-- `set_library_visibility` makes a library `public` (every workspace member sees it) or `private` (its maker, admins and the members added to it in Velo), on the user's request. Only its maker or a workspace admin may, and General stays public.
-- `set_library_share_link` turns a library's public link `on` (the same link as before), `off`, or `regenerate` (a new link; the old one stops working for good). Turning it on makes a public link: anyone who has it, outside the workspace too, can watch the library's videos, so confirm with the user before turning it on or replacing it. `share_url` is in the reply while the link is on. Only the library's maker or a workspace admin may.
+- `set_library_visibility` makes a library `public` (every workspace member sees it) or `private` (its maker, admins and the members added to it in Velo), on the user's request. Only its maker or a workspace admin may, and General stays public. Changing the visibility of a library on the Velo Public Library takes it off; the reply says so.
+- `set_library_share_link` turns a library's public link `on` (the same link as before), `off`, or `regenerate` (a new link; the old one stops working for good). Turning it on makes a public link: anyone who has it, outside the workspace too, can watch the library's videos, so confirm with the user before turning it on or replacing it. `share_url` is in the reply while the link is on. Only the library's maker or a workspace admin may. This link is not the Velo Public Library.
+- `set_velo_public_library` puts a library on the workspace's Velo Public Library (`published: true`), the page outside viewers sign in to and watch, or takes it off (`false`), on the user's request. Only a workspace admin or owner may. Only a library public to the workspace can go on; any library can come off. Confirm with the user before putting one on: its videos become visible to the page's viewers, and for General that is every video in the workspace whose share link is on. Turning the page itself on or off is in Velo's settings; the reply says when the page isn't live yet. When the user asks for "our public library link", it is `public_library.url` from `list_libraries`.
 - Confirm the library by the name in the reply, never by id.
 
 ## Prompting Velo
@@ -218,7 +238,8 @@ A failed call returns `code`, `message` and `retryable`, plus `retry_after_secon
 - Filling a sample prompt's [brackets] with guesses: a timestamp, component, emphasis or style the user didn't give.
 - Answering Velo's questions or approving a script on the user's behalf.
 - Summarizing Velo's script or questions: show them whole.
-- Inventing URLs, voices, avatars, assets or previews.
+- Inventing URLs, voices, avatars, templates, assets or previews.
+- Picking a template the user didn't ask for.
 - Saying a file was deleted from Assets: no tool deletes one.
 - Starting an update on a video the user didn't pick, or on every outdated video at once.
 - Calling `get_video_status` again on any status other than Working or Finishing.

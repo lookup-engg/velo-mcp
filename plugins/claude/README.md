@@ -48,10 +48,13 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `edit_video` | Sends your reply, an answer to Velo's question, script approval or a change request to a video. Spends credits. |
 | `get_video_status` | Gets a video's status, Velo's latest message and any question waiting for you. |
 | `list_videos` | Lists your videos in the workspace, most recent first. |
+| `list_workspaces` | Lists your Velo workspaces and the one this connection works in. |
+| `switch_workspace` | Moves this connection to another of your workspaces. |
 | `upload_file` | Adds files (a document, a recording, images, a logo) to a video through an upload link. |
 | `list_files` | Confirms which uploaded files are waiting to go to Velo. |
 | `list_voices` | Lists the narration voices you can use. |
 | `list_avatars` | Lists the AI presenters you can use. |
+| `list_templates` | Lists the templates you can start a video from. |
 | `list_assets` | Lists and searches the files in your workspace's Assets. |
 | `upload_asset` | Adds files to your workspace's Assets through an upload link, to reuse in any video. |
 | `replace_asset` | Replaces a file in your workspace's Assets with a newer version. You choose Replace… in that file's menu. |
@@ -65,6 +68,7 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `rename_library` | Renames a library. General's name can't change. |
 | `set_library_visibility` | Makes a library public or private. General stays public. |
 | `set_library_share_link` | Turns a library's public link on or off, or replaces it. |
+| `set_velo_public_library` | Puts a public library on the workspace's Velo Public Library, or takes it off. Admins and owners only. |
 
 ## Credits
 
