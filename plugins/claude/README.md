@@ -58,6 +58,8 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `list_assets` | Lists and searches the files in your workspace's Assets. |
 | `upload_asset` | Adds files to your workspace's Assets through an upload link, to reuse in any video. |
 | `replace_asset` | Replaces a file in your workspace's Assets with a newer version. You choose Replace… in that file's menu. |
+| `asset_videos` | Lists the videos using a file in Assets and which still hold an older version. |
+| `update_videos_with_asset` | Updates the videos you choose to use the latest version of a file. Spends credits. |
 | `export_video` | Renders the current draft into the finished video. Free. |
 | `list_libraries` | Lists the workspace's libraries the user can see. |
 | `create_library` | Creates a public or private library in the workspace. |
@@ -70,7 +72,7 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 
 ## Credits
 
-Making and changing videos (`create_video`, `edit_video`) spends credits from your Velo workspace. Exporting is free, though automatic repairs after a render error may use credits. Workspace owners add credits in Velo's billing settings.
+Making and changing videos (`create_video`, `edit_video`, `update_videos_with_asset`) spends credits from your Velo workspace. Exporting is free, though automatic repairs after a render error may use credits. Workspace owners add credits in Velo's billing settings.
 
 ## Data handling
 
