@@ -11,7 +11,9 @@ description: >
   browsing, adding, replacing or removing files in the workspace's Velo Assets, and
   when creating or renaming a workspace library, changing who can see it, turning
   its public link on or off, or adding a video to one or taking it out, and when
-  asking which Velo workspace is in use or switching to another of their workspaces.
+  asking which Velo workspace is in use or switching to another of their workspaces,
+  and when the user wants a word spelled or pronounced the same way in every video
+  ("how to say", "pronunciation").
 ---
 
 # Making videos with Velo
@@ -166,6 +168,15 @@ A library is a shared collection in the workspace where exported videos are publ
 - `set_library_share_link` turns a library's public link `on` (the same link as before), `off`, or `regenerate` (a new link; the old one stops working for good). Turning it on makes a public link: anyone who has it, outside the workspace too, can watch the library's videos, so confirm with the user before turning it on or replacing it. `share_url` is in the reply while the link is on. Only the library's maker or a workspace admin may. This link is not the Velo Public Library.
 - `set_velo_public_library` puts a library on the workspace's Velo Public Library (`published: true`), the page outside viewers sign in to and watch, or takes it off (`false`), on the user's request. Only a workspace admin or owner may. Only a library public to the workspace can go on; any library can come off. Confirm with the user before putting one on: its videos become visible to the page's viewers, and for General that is every video in the workspace whose share link is on. Turning the page itself on or off is in Velo's settings; the reply says when the page isn't live yet. When the user asks for "our public library link", it is `public_library.url` from `list_libraries`.
 - Confirm the library by the name in the reply, never by id.
+
+## Pronunciations
+
+The workspace's pronunciations list the names, places, products and acronyms the workspace's videos use: how each is spelled on screen and how every voice says it. Every video follows them.
+
+- `get_pronunciations` reads them: each term's spelling, `sounds_like`, `ipa`, `letter_by_letter` and `note`. `active` is false on a free plan, where the terms are kept but not used; `can_add` says whether this user may add terms.
+- When the user wants a word spelled or said the same way in their videos ("it's SAH-nus, not SAY-nus", "always write it as PLASS"), fix the current video with `edit_video` in the user's words, then suggest adding the word to the workspace's pronunciations so every video follows it. One suggestion per word.
+- `add_pronunciation` adds it, only after the user asks or agrees: the `term` as it is spelled, `sounds_like` in the user's words (a respelling, a comparison or stress notes), `letter_by_letter` for acronyms said that way, an optional `category` and `note`. It needs a workspace admin on a paid plan; a refusal says what the user can do instead, so pass that on.
+- Terms are changed and removed in Velo, at `pronunciations_url`. A word that is already there with a different sound is changed there.
 
 ## Prompting Velo
 
