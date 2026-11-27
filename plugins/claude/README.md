@@ -48,15 +48,33 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `edit_video` | Sends your reply, an answer to Velo's question, script approval or a change request to a video. Spends credits. |
 | `get_video_status` | Gets a video's status, Velo's latest message and any question waiting for you. |
 | `list_videos` | Lists your videos in the workspace, most recent first. |
+| `list_workspaces` | Lists your Velo workspaces and the one this connection works in. |
+| `switch_workspace` | Moves this connection to another of your workspaces. |
 | `upload_file` | Adds files (a document, a recording, images, a logo) to a video through an upload link. |
 | `list_files` | Confirms which uploaded files are waiting to go to Velo. |
 | `list_voices` | Lists the narration voices you can use. |
 | `list_avatars` | Lists the AI presenters you can use. |
+| `list_templates` | Lists the templates you can start a video from. |
+| `list_assets` | Lists and searches the files in your workspace's Assets. |
+| `upload_asset` | Adds files to your workspace's Assets through an upload link, to reuse in any video. |
+| `replace_asset` | Replaces a file in your workspace's Assets with a newer version. You choose Replace… in that file's menu. |
+| `asset_videos` | Lists the videos using a file in Assets and which still hold an older version. |
+| `update_videos_with_asset` | Updates the videos you choose to use the latest version of a file. Spends credits. |
 | `export_video` | Renders the current draft into the finished video. Free. |
+| `list_libraries` | Lists the workspace's libraries the user can see. |
+| `create_library` | Creates a public or private library in the workspace. |
+| `add_to_library` | Puts an exported video in a library. General already holds every video. |
+| `remove_from_library` | Takes a video out of one library. The video and its share link stay. |
+| `rename_library` | Renames a library. General's name can't change. |
+| `set_library_visibility` | Makes a library public or private. General stays public. |
+| `set_library_share_link` | Turns a library's public link on or off, or replaces it. |
+| `set_velo_public_library` | Puts a public library on the workspace's Velo Public Library, or takes it off. Admins and owners only. |
+| `get_pronunciations` | Shows how the workspace's videos spell and say its names, places, products and acronyms. |
+| `add_pronunciation` | Adds a word to the workspace's pronunciations so every video says it the same way. Admins on a paid plan only. |
 
 ## Credits
 
-Making and changing videos (`create_video`, `edit_video`) spends credits from your Velo workspace. Exporting is free, though automatic repairs after a render error may use credits. Workspace owners add credits in Velo's billing settings.
+Making and changing videos (`create_video`, `edit_video`, `update_videos_with_asset`) spends credits from your Velo workspace. Exporting is free, though automatic repairs after a render error may use credits. Workspace owners add credits in Velo's billing settings.
 
 ## Data handling
 
