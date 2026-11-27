@@ -69,6 +69,8 @@ To disconnect, remove the connection in Claude, or disconnect it in Velo under *
 | `set_library_visibility` | Makes a library public or private. General stays public. |
 | `set_library_share_link` | Turns a library's public link on or off, or replaces it. |
 | `set_velo_public_library` | Puts a public library on the workspace's Velo Public Library, or takes it off. Admins and owners only. |
+| `get_pronunciations` | Shows how the workspace's videos spell and say its names, places, products and acronyms. |
+| `add_pronunciation` | Adds a word to the workspace's pronunciations so every video says it the same way. Admins on a paid plan only. |
 
 ## Credits
 
